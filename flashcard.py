@@ -4,6 +4,9 @@ import transcript
 from openai import OpenAI
 import tiktoken
 
+# Load environment variables from .env file
+load_dotenv()
+
 API_KEY = os.getenv('OPEN_AI_API_KEY')
 SYSTEM_PROMPT = "You are a flashcard generator. You generate questions and answers that are key to understanding the transcripts given to you."
 TEMPERATURE = 0
@@ -72,7 +75,13 @@ def generate_flashcards(texts : list[str], count_per_chunk, temp = TEMPERATURE, 
 
     return flashcards
 
+def write_flashcards_to_file(flashcards, filename):
+    with open(filename, 'w') as file:
+        for card in flashcards:
+            file.write(f"{card.content['question']};{card.content['answer']}\n")
+
 if __name__ == "__main__":
     video_transcript = transcript.get_transcript("bjL-Z7fW2FM")
+    write_flashcards_to_file(flashcards, "flashcards.txt")
     print(generate_flashcards(split_text(video_transcript, 3900), 2))
 

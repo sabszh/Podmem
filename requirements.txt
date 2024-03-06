@@ -1,0 +1,5 @@
+flask==3.0.2
+markupsafe==2.1.5
+openai==1.13.3
+tiktoken==0.6.0
+youtube_transcript_api==0.6.2

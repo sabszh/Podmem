@@ -3,7 +3,7 @@ from markupsafe import escape
 import flashcard
 import transcript
 
-TOKENS_PER_CHUNK = 3900
+TOKENS_PER_CHUNK = 3900 
 app = Flask(__name__)
 
 #generate and serve flashcards for given video
@@ -24,4 +24,5 @@ def serve_flashcards_id(video_id, tokens_per_chunk = TOKENS_PER_CHUNK):
     video_transcript = transcript.get_transcript(escape(video_id))
     flashcards = flashcard.generate_flashcards(flashcard.split_text(video_transcript, tokens_per_chunk), 4)
     dict_list = [flashcard.return_dict() for flashcard in flashcards]
+    write_flashcards_to_file(flashcards, "flashcards.txt")
     return jsonify(dict_list)
