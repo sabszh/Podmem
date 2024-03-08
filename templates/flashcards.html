@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+    
+    {% block javascript %}
+    <script type="text/javascript">
+
+      // eslint-disable-next-line
+      let flashcards_data = JSON.parse({{ flashcards_dumps | tojson }});
+      console.log(flashcards_data[0].question)
+
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("carousel", {
+          cards: flashcards_data,
+          curCard: 0,
+          nextCard(){
+            if (this.$store.carousel.curCard + 1 < flashcards_data.length){
+              this.$store.carousel.curCard++;
+            }
+            else {
+              this.$store.carousel.curCard = 0;
+            }
+          },
+          prevCard(){
+            if (this.$store.carousel.curCard - 1 >= 0){
+              this.$store.carousel.curCard--;
+            }
+            else {
+              this.$store.carousel.curCard = flashcards_data.length - 1;
+            }
+          }
+        });
+      });
+    </script>
+    {% endblock %}
+
+    <div id = "flashcard-wrapper">
+
+      <h1 class = "small"> Generated <b> {{n_cards}}</b> flashcards </h1>
+
+      <div x-data>
+        <div class = "flashcard">
+          <div><span x-text = "'Q: ' + $store.carousel.cards[$store.carousel.curCard].question"></span> <div class = "shadow"></div></div>
+        </div>
+        <div class = "flashcard answer">
+          <div><span x-text = "'A:' + $store.carousel.cards[$store.carousel.curCard].answer"></span> <div class = "shadow"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id = "nav-wrapper">
+      <div x-data>
+        <img @click="$store.carousel.prevCard" class = "clickable" src = "{{ url_for('static', filename='images/arrow_nav.svg') }}" alt = "Left Arrow Icon">
+        <span> <span x-text = "$store.carousel.curCard + 1"></span>/{{n_cards}} </span>
+        <img @click="$store.carousel.nextCard" class = "clickable right" src = "{{ url_for('static', filename='images/arrow_nav.svg') }}" alt = "Right Arrow Icon">
+      </div>
+    </div>
+
+    <div id = "export-wrapper">
+      <h2>Export to</h2>
+      <div>
+        <a class = "button" href = "https://www.paypal.com/dk/home">Quizlet</a>
+        <a class = "button" href = "https://www.paypal.com/dk/home">Brainscape</a>
+        <a class = "button" href = "https://www.paypal.com/dk/home">Anki</a>
+      </div>
+    </div>
+
+{% endblock %}

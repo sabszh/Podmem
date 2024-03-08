@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Podmem - YouTube to Flash Cards</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        
+        <!-- HTMX -->
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    
+        <!-- Alpine.js -->
+        <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+
+    <body class = "{{body_tag}}">
+
+        {% block body %}
+            <div id = "wrapper">
+                <a href = "index" class = "logo" ><img src = "{{ url_for('static', filename='images/logo.svg') }}" alt = "Podmem Logo"></a>
+                <h1 class = "small">Generate automatic flashcards from YouTube videos. <br> Export to Anki, Brainscape or Quizlet.</h1>
+                <form x-data = "{settings: false, loading: false}" action = "{{ url_for('flashcards') }}" class = "url-form" method="post">
+                    <div class = "url-input">
+                        <img @click = "settings = !settings" class = "settings-icon clickable" src = "{{ url_for('static', filename='images/settings.svg') }}" alt = "Settings Icon">
+                        <input type = "text" name = "video-url" placeholder = "Paste YouTube URL" required><br>
+                        <button x-cloak @click = "loading=true" :class="loading ? 'submit loading' : 'submit'"><img x-show="!loading" src = "{{ url_for('static', filename='images/arrow_submit.svg') }}" alt = "Arrow Icon"><img x-transition.opacity.duration.500ms x-show="loading" x-cloak src = "{{ url_for('static', filename='images/loading.svg') }}" alt = "Arrow Icon"></button>
+                    </div>
+                    <div class="settings-dropdown" x-cloak x-show="settings" x-transition>
+                        <style> select {background-image: url("{{ url_for('static', filename='images/arrow_select.svg')}}");} </style>
+                        <select name = "amount">
+                            <option disabled selected value>Amount</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+
+                        <select name = "difficulty">
+                            <option disabled selected value>Difficulty</option>
+                            <option value="low">Easy</option>
+                            <option value="medium">Average</option>
+                            <option value="high">Expert</option>
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+        {% endblock %}
+
+    </body>
+</html>

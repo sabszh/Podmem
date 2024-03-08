@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+
+    <div class = "donate">
+      <p class = "small">Want to help keep this service free?</p>
+      <a class = "button" href = "flashcards">Donate a Coffee <img src = "{{ url_for('static', filename='images/coffee.svg') }}" alt = "Coffee Icon"></a>
+    </div>
+    
+{% endblock %}

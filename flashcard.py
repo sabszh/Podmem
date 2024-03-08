@@ -3,6 +3,7 @@ from dotenv import load_dotenv, find_dotenv
 import transcript
 from openai import OpenAI
 import tiktoken
+import utility
 
 API_KEY = os.getenv('OPEN_AI_API_KEY')
 SYSTEM_PROMPT = "You are a flashcard generator. You generate questions and answers that are key to understanding the transcripts given to you."
@@ -39,15 +40,15 @@ def clean_text(text) -> str:
     return text
 
 #generate flash cards from transcript text
-def generate_flashcards(texts : list[str], count_per_chunk, temp = TEMPERATURE, system_prompt = SYSTEM_PROMPT, model = MODEL) -> list[Flashcard]:
+def generate_flashcards(texts : list[str], count_per_chunk, difficulty = 2, temp = TEMPERATURE, system_prompt = SYSTEM_PROMPT, model = MODEL) -> list[Flashcard]:
     outputs = []
-
+    difficulty_options = ["Very easy", "Average", "Extremely hard"]
     #generate questions/answers
     for text in texts:
         if len(outputs) == 0:
-            prompt = f"Generate {count_per_chunk} short flashcard questions and answers to help remember the most important points of the video transcript below. The questions should only relate the overall topic of the video and always be educational. Questions should focus on the educational content of the video, so avoid questions regarding the speaker, the channel, sponsors, the description, other videos etc. \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
+            prompt = f"Generate {count_per_chunk} short flashcard questions and answers to help remember the most important points of the video transcript below. The questions should only relate the overall topic of the video and always be educational. Questions should focus on the educational content of the video, so avoid questions regarding the speaker, the channel, sponsors, the description, other videos etc. The difficulty of the flashcards should be: {difficulty_options[difficulty-1]} \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
         else:
-            prompt = f"Generate {count_per_chunk} short flashcard questions and answers to help remember the most important points of the video transcript below. The questions should only relate the overall topic of the video and always be educational. Questions should focus on the educational content of the video, so avoid questions regarding the speaker, the channel, sponsors, the description, other videos etc. Only generate questions and answers that haven't already been generated. \n Already Generated: {outputs[:-1]}  \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
+            prompt = f"Generate {count_per_chunk} short flashcard questions and answers to help remember the most important points of the video transcript below. The questions should only relate the overall topic of the video and always be educational. Questions should focus on the educational content of the video, so avoid questions regarding the speaker, the channel, sponsors, the description, other videos etc. Only generate questions and answers that haven't already been generated. The difficulty of the flashcards should be: {difficulty_options[difficulty-1]} \n Already Generated: {outputs[:-1]}  \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
         
         outputs.append(client.chat.completions.create(
             model=model,

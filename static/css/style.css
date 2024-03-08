@@ -1,0 +1,381 @@
+[x-cloak] { display: none; }
+
+:root {
+    font-size: 18px;
+    font-family: "Raleway";
+    height: 100%;
+}
+
+body {
+    background: #FFF2F2;
+    margin: 0;
+    margin-top: 10%;
+    padding-bottom: 5rem;
+    width: 100%; 
+    display: grid;
+    justify-content: center;
+    grid-auto-rows: min-content;
+    grid-template-columns: 
+    [full-start] minmax(1rem, 1fr)
+    [main-start] minmax(5rem, 43em) [main-end]
+    minmax(1rem, 1fr) [full-end];
+    
+}
+
+body.show_flashcards {
+    margin-top: 4rem;
+    align-content: baseline; 
+}
+
+#wrapper {
+    display: inherit;
+    grid-column: main;
+    height: 100%;
+}
+
+body.show_flashcards #wrapper h1 {
+    display: none;
+}
+
+body.show_flashcards #wrapper .logo {
+    margin-bottom: 1rem;
+}
+
+#export-wrapper {
+    box-sizing: border-box;
+    grid-column: main;
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+}
+
+#export-wrapper div {
+    margin-top: 2.5rem;
+}
+
+#export-wrapper h2 {
+    font-size: 1.8rem;
+    font-weight: 300;
+}
+
+#export-wrapper .button {
+    margin-right: 1.5rem;
+}
+
+#flashcard-wrapper {
+    display: inherit;
+    grid-column: full;
+    justify-content: center;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+#flashcard-wrapper div {
+    display: flex;
+    justify-content: center;
+    justify-self: center; 
+    gap: 3rem;
+}
+
+#flashcard-wrapper h1{
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 4rem;
+    margin-top: 2rem;
+}
+
+.flashcard {
+    position: relative;
+    justify-content: center;
+    box-sizing: content-box;
+}
+
+.flashcard div {
+    width: 13.5rem;
+    height: 25rem;
+    border-radius: 1.5rem;
+    background: #FF3030;
+    padding: 2rem;
+    overflow-y:auto;
+    overflow-x: hidden;
+}
+
+.flashcard div::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.flashcard div::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px grey; 
+    border-radius: 10px;
+}
+
+/* Handle */
+.flashcard div::-webkit-scrollbar-thumb {
+    background: rgb(7, 7, 7); 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.flashcard div::-webkit-scrollbar-thumb:hover {
+    background: #009eb3; 
+}
+
+.flashcard.answer div {
+    background: #00BA61;
+}
+
+.flashcard div.shadow {
+    position: absolute;
+    background: black;
+    top: 0;
+    left: 1rem;
+    z-index: -1;
+}
+
+.flashcard span {
+    font-size: 1.5rem;
+    font-family: "Poppins";
+    font-weight: 600;
+    color: white;
+}
+
+#nav-wrapper {
+    grid-auto-flow: inherit;
+    display: inherit;
+    grid-column: main;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+#nav-wrapper div {
+    display: flex;
+    align-items: center;
+}
+
+#nav-wrapper div img {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+    width: 4rem; 
+}
+
+#nav-wrapper div span {
+    font-family: "Poppins";
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+#nav-wrapper div .right {
+    transform: scaleX(-1);
+}
+
+
+button, .button {
+    background: black;
+	color: white;
+	border: none;
+    border-radius: 0.6rem;
+	padding: 1rem 2rem 1rem 2rem;
+	font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: .005rem;
+    cursor: pointer;
+	outline: inherit;
+    width: fit-content;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+button:not(.loading):hover, .button:not(.loading):hover{
+    background: #FF9292;
+}
+
+button img, .button img {
+    vertical-align: middle;
+    margin-left: 1rem;
+    padding: 0;
+}
+
+.clickable {
+    transition: 0.2s;
+}
+
+.clickable:hover {
+    filter: invert(66%) sepia(26%) saturate(1262%) hue-rotate(312deg) brightness(109%) contrast(105%);
+    cursor:pointer;
+}
+
+.logo {
+    justify-self: center;
+    margin-bottom: 2.5rem;
+}
+
+.logo img {
+    width: 20rem;  
+}
+
+.url-input {
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+}
+
+.settings-icon {
+    position: absolute;
+    width: 1.7rem;
+    margin-top: 0.9rem;
+    margin-left: 1rem;
+    transition: 0.2s;
+}   
+
+.settings-dropdown {
+    width: auto;
+    position: absolute;
+    margin-top: 0.5rem;
+}
+
+input[type=text] {
+    width: 100%;
+    padding-left: 4.3rem;
+    height: 3.11rem;
+    font-family: "Raleway";
+    font-size: 1.2rem;
+    font-weight: 200;
+    color: black;
+    border-radius: 0.6rem 0rem 0rem 0.6rem;
+    border-width: 1px; 
+    border-color: #BFBFBF;
+    outline: none;
+    border-style: solid;
+}
+
+select {
+    appearance: none;
+    /*  safari  */
+    -webkit-appearance: none;
+    /*  other styles for aesthetics */
+    font-size: 0.8rem;
+    padding: 0.675em 1.5em 0.675em 1em;
+    background-color: transparent;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-weight: 300;
+    font-family: inherit;
+    background-position: right center; /*Positioning*/
+    background-repeat: no-repeat; /*Prevent showing multiple background images*/
+    background-size: 0.5rem;
+    margin-right: 1rem;
+    transition: 0.2s;
+}
+
+select:focus{
+    outline: none;
+}
+
+select:hover {
+    font-weight: 800;
+}
+  
+.custom-select::before,
+.custom-select::after {
+    --size: 0.3rem;
+    content: "";
+    position: absolute;
+    right: 1rem;
+    pointer-events: none;
+}
+
+.custom-select::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid black;
+    top: 40%;
+}
+
+.custom-select::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid black;
+    top: 55%;
+}
+
+::placeholder {
+    color: #999999;
+    opacity: 1; /* Firefox */
+}
+
+.submit {
+    padding: 1rem 1.3rem 1rem 1.5rem; 
+    height: 100%;
+    border-radius: 0rem 0.6rem 0.6rem 0rem;
+}
+
+.submit img {
+    margin-left: -0.3rem;
+    width: 1rem;
+    transition: 0.3s;
+}
+
+.submit:not(.loading):hover img {
+    margin-left: 0.2rem;
+    padding-right: 0.3rem;
+}
+
+.submit.loading img {
+    margin-left: 0.2rem;
+    padding-right: 0.3rem;
+}
+
+.donate {
+    grid-column: main;
+    margin-top: 10rem;
+    justify-content: center;
+    text-align: center;
+}
+
+.donate .small {
+    margin-bottom: 3rem;
+}
+
+.donate button {
+    justify-self: center;
+}
+
+.donate img {
+    position: relative;
+    bottom: 2px;
+}
+
+.small {
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+    font-weight: 300;
+    text-align: center;
+    margin-top: 0;
+}
+
+.medium {
+    font-size: 2.2rem;
+    font-weight: 300;
+    text-align: center;
+}
+
+@media screen and (max-width: 1200px) {
+    :root {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    #flashcard-wrapper div {
+        display: grid;
+    }
+
+    .flashcard {
+        width: 95%;
+    }
+}
