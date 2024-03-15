@@ -3,7 +3,6 @@ from dotenv import load_dotenv, find_dotenv
 import transcript
 from openai import OpenAI
 import tiktoken
-import utility
 
 load_dotenv()
 
