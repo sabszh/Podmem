@@ -33,6 +33,56 @@
           }
         });
       });
+      
+      // Export flashcards for Anki format
+      function exportToAnki() {
+        let formattedData = "";
+        flashcards_data.forEach(flashcard => {
+            formattedData += `${flashcard.question};${flashcard.answer}\n`;
+        });
+        let blob = new Blob([formattedData], {type: "text/plain"});
+        let url = URL.createObjectURL(blob);
+        // Trigger download
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'flashcards_anki.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+      function exportToBrainscape() {
+        let formattedData = "";
+        flashcards_data.forEach(flashcard => {
+            formattedData += `${flashcard.question},${flashcard.answer}\n`;
+        });
+        let blob = new Blob([formattedData], {type: "text/plain"});
+        let url = URL.createObjectURL(blob);
+        // Trigger download
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'flashcards_brainscape.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+      function exportToQuizlet() {
+        let formattedData = "";
+        flashcards_data.forEach(flashcard => {
+            formattedData += `${flashcard.question},${flashcard.answer}\n`;
+        });
+        let blob = new Blob([formattedData], {type: "text/plain"});
+        let url = URL.createObjectURL(blob);
+        // Trigger download
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = 'flashcards_quizlet.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
     </script>
     {% endblock %}
 
@@ -58,13 +108,12 @@
       </div>
     </div>
 
-    <div id = "export-wrapper">
+    <div id="export-wrapper">
       <h2>Export to</h2>
       <div>
-        <a class = "button" href = "https://www.paypal.com/dk/home">Quizlet</a>
-        <a class = "button" href = "https://www.paypal.com/dk/home">Brainscape</a>
-        <a class = "button" href = "https://www.paypal.com/dk/home">Anki</a>
+      <button class="button" onclick="exportToQuizlet()">Quizlet</button>
+        <button class="button" onclick="exportToBrainscape()">Brainscape</button>
+        <button class="button" onclick="exportToAnki()">Anki</button>
       </div>
     </div>
-
 {% endblock %}
