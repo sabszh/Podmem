@@ -5,6 +5,8 @@ from openai import OpenAI
 import tiktoken
 import utility
 
+load_dotenv()
+
 API_KEY = os.getenv('OPEN_AI_API_KEY')
 SYSTEM_PROMPT = "You are a flashcard generator. You generate questions and answers that are key to understanding the transcripts given to you."
 TEMPERATURE = 0
