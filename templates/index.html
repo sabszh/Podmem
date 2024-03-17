@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+
+    <div id = "hero-wrapper">
+      <h1 class = "big">Generate automatic <span class = "red">flashcards</span> from YouTube.</h1>
+      <span class = "small">Export to Anki, Brainscape or Quizlet.</span>
+    </div>  
+
+
+    {% block javascript %}
+    <script type="text/javascript">
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("url_input", () => ({
+          validate: false,
+          input: '',
+          settings: false,
+          loading: false,
+          error_message: "",
+          display_error: false,
+          validateInput() {
+            input = this.input
+            if (input == "") {
+              this.validate = false;
+              this.error_message = "Field is empty"
+              console.log(this.validate)
+            }
+            else if (!input.includes("youtube.com/watch?v=")) {
+              this.validate = false;
+              this.error_message = "Invalid URL"
+              console.log(this.validate)
+            }
+            else {
+              this.validate = true;
+              this.display_error = false;
+            }
+          }           
+        }));
+      });
+    </script>
+    {% endblock %}    
+
+    <div id = "search-wrapper">
+      <form x-data = "url_input" action = "{{ url_for('flashcards') }}" class = "url-form" method="post" name = "url-form" x-effect = "validateInput" :onsubmit="validate ? 'return true' : 'return false'">
+          <div class = "url-input">
+              <img @click = "settings = !settings" class = "settings-icon clickable" src = "{{ url_for('static', filename='images/settings.svg') }}" alt = "Settings Icon">
+              <input type = "text" name = "video-url" placeholder = "Paste YouTube URL" x-model="input"><br>
+              <input type = "checkbox" class = "honey" name = "terms">
+              <button x-cloak @click = "if(validate){loading=true}else{display_error=true}" :class="loading ? 'submit loading' : 'submit'"><img x-show="!loading" src = "{{ url_for('static', filename='images/arrow_submit.svg') }}" alt = "Arrow Icon"><img x-transition.opacity.duration.500ms x-show="loading" x-cloak src = "{{ url_for('static', filename='images/loading.svg') }}" alt = "Arrow Icon"></button>
+          </div>
+          <input type = "input" class = "honey" name = "surname">
+          <div class="settings-dropdown" x-cloak x-show="settings" x-transition>
+              <style> select {background-image: url("{{ url_for('static', filename='images/arrow_select.svg')}}");} </style>
+              <select name = "amount">
+                  <option disabled selected value>Amount</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+              </select>
+
+              <select name = "difficulty">
+                  <option disabled selected value>Difficulty</option>
+                  <option value="low">Easy</option>
+                  <option value="medium">Average</option>
+                  <option value="high">Expert</option>
+              </select>
+          </div>
+
+          <div class = "error-message" x-transition x-show = "display_error" x-text = "error_message" x-cloak x-init="setTimeout(() => display_error = false, 5000)"></div>
+      </form>
+  </div>  
+
+  <div id = "flashcard-wrapper">
+
+    <div x-data>
+      <div class = "flashcard">
+        <div><span class = "letter">Q: </span><span>Why use flashcards?</span></div>
+      </div>
+      <div class = "flashcard answer">
+        <div><span class = "letter">A: </span><span>The benefit of using flashcards is their effectiveness in aiding memorization and quick retrieval of information due to their concise format and repetition-based learning.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class = "donate">
+    <p class = "small">Want to help keep this service free?</p>
+    <a class = "button black" href = "flashcards">Donate a Coffee <img src = "{{ url_for('static', filename='images/coffee.svg') }}" alt = "Coffee Icon"></a>
+  </div>
+    
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+
+    {% block javascript %}
+    <script type="text/javascript">
+      //eslint-disable-next-line
+      let flashcards_data = JSON.parse({{ flashcards_dumps | tojson }});
+      console.log(flashcards_data[0].question);
+
+      document.addEventListener("alpine:init", () => {
+        Alpine.store('carousel', {
+          cards: flashcards_data,
+          curCard: 0,
+        }),
+        Alpine.data("export_", () => ({
+          // Export flashcards for Anki format
+          export_file(seperator, file_name) {
+            let formattedData = "";
+            Alpine.store('carousel').cards.forEach(flashcard => {
+                formattedData += `"${flashcard.question}"${seperator}"${flashcard.answer}"\n`;
+            });
+            let blob = new Blob([formattedData], {type: "text/plain"});
+            let url = URL.createObjectURL(blob);
+            // Trigger download
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = file_name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        }));
+      });
+    </script>
+    {% endblock %}    
+
+    <div id = "video-titledata-wrapper" x-data="export_">
+      <h1 class = "big">{{title}}</h1>
+      <span x-data="{showDropdown: false}" class = "small dropdown-wrapper" @mouseleave = "showDropdown=false">Video by {{channel}}
+        <a class = "button inverse" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">Export <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+        <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" >
+          <div class = "item" @click="export_file(`${';'}`, `${'flashcard_anki.txt'}`)"> Anki </div>
+          <div class = "item" @click="export_file(`${','}`, `${'flashcard_brainscape.csv'}`)"> Brainscape </div>
+          <div class = "item" @click="export_file(`${','}`, `${'flashcard_quizlet.csv'}`)"> Quizlet </div>
+        </div>
+      </span>
+    </div>  
+
+    <div id = "flashcard-wrapper">
+      <div x-data>
+        <div class = "flashcard">
+          <div> <span class = "letter">Q: </span><span contenteditable="true" @input="$store.carousel.cards[$store.carousel.curCard].question = $el.textContent" x-text="$store.carousel.cards[$store.carousel.curCard].question" x-effect="$store.carousel.curCard"></span></div>
+        </div>
+        <div class = "flashcard answer">
+          <div><span class = "letter">A: </span><span contenteditable="true" @input="$store.carousel.cards[$store.carousel.curCard].answer = $el.textContent" x-text = "$store.carousel.cards[$store.carousel.curCard].answer" x-effect="$store.carousel.curCard"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id = "nav-wrapper">
+      <div x-data>
+        <img class = "clickable" src = "{{ url_for('static', filename='images/arrow_nav.svg') }}" alt = "Left Arrow Icon" @click=
+        "if ($store.carousel.curCard - 1 >= 0){
+          $store.carousel.curCard--;
+        }
+        else {
+          $store.carousel.curCard = $store.carousel.cards.length - 1;
+        }">
+        <span> <span  x-effect = "$store.carousel.curCard" x-text = "$store.carousel.curCard + 1 + '/' + $store.carousel.cards.length"></span> </span>
+        <img x-data="{canClick: true}" @click=
+        "if ($store.carousel.cards.length - 1 > 0){
+          if ($store.carousel.curCard + 1 > $store.carousel.cards.length - 1)
+          {
+            $store.carousel.curCard = $store.carousel.cards.length - 2;
+          }
+          $store.carousel.cards.splice(curCard, 1);
+        }
+        if ($store.carousel.cards.length == 1){canClick=false}"
+        src = "{{ url_for('static', filename='images/trash.svg') }}" alt = "Trashcan Icon" :class = "canClick ? 'clickable' : 'nonclickable'" style = "margin-right: 0; margin-left: 1rem; width: 2.5rem;">
+        <img class = "clickable right" src = "{{ url_for('static', filename='images/arrow_nav.svg') }}" alt = "Right Arrow Icon" @click=
+        "if ($store.carousel.curCard + 1 < $store.carousel.cards.length){
+          $store.carousel.curCard++;
+        }
+        else {
+          $store.carousel.curCard = 0;
+        }">
+      </div>
+    </div>
+
+    <div x-cloak class = "popup" x-data = "{open: false}" x-show = "open" x-transition.opacity.duration.500ms x-init="setTimeout(() => open = true, 5000)">
+      <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
+      <h3 class =  "small"> We Need Feedback!</h3>
+      <p> Podmem is a university project. Help us out by answering our research questionare. <br> <br> We would be eternally grateful!</p>
+      <a href = "https://docs.google.com/forms/d/1X5nJlEB9_hOrMPa4wVWJJHscZNU54mmBIgCvlqSBGmY/viewform?edit_requested=true" target="_blank"><button> Participate </button></a>
+    </div>
+
+{% endblock %}

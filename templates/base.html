@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Podmem - YouTube to Flash Cards</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+        <!-- HTMX -->
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    
+        <!-- Alpine Plugins -->
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
+
+        <!-- Alpine.js -->
+        <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+
+    <body class = "{{body_tag}}">
+
+        {% block body %}
+            <header id = "header-wrapper">
+                <a href = "index" class = "logo" ><img src = "{{ url_for('static', filename='images/logo.svg') }}" alt = "Podmem Logo"></a>
+                <div class = "login">
+                    <img src = "{{ url_for('static', filename='images/hamburger.svg') }}" alt = "Hamburger Menu">
+                    <button> Log in </button> <button class = "inverse"> Register </button>
+                </div>
+            </header>         
+        {% endblock %}
+
+        <footer>
+            <span>
+                 podmem.com – all rights reserved.
+            </span>
+        </footer>  
+
+    </body>
+</html>
