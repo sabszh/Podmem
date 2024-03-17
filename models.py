@@ -1,6 +1,4 @@
 from app import app, db
-import pymysql
-import config
 
 # Sessions table
 class Sessions(db.Model):
@@ -17,30 +15,6 @@ class Sessions(db.Model):
     export_option = db.Column(db.String(30), nullable=True, unique=False)
     export_json = db.Column(db.String(30), nullable=True, unique=False)
 
-#create db
-def create_db(name : str):
-
-    # Initializing connection
-    con = pymysql.connections.Connection(
-        host=config.HOST,
-        user=config.USER,
-        password=config.PIN
-    )
-
-    # Creating cursor object
-    cursor = con.cursor()
-
-    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {name}")
-    cursor.execute("SHOW DATABASES")
-
-    # Displaying databases
-    for databases in cursor:
-        print(databases)
-
-    # Closing the cursor and connection to the database
-    cursor.close()
-    con.close()
-
 #add session entry 
 def add_session(video_id, time, transcript, json_data, amount, difficulty):
 
@@ -54,7 +28,3 @@ def add_session(video_id, time, transcript, json_data, amount, difficulty):
         )
         db.session.add(session)
         db.session.commit()
-
-#create analytics database and add tables defined in Sessions class
-if __name__ == "__main__":
-    create_db(config.DB_NAME)

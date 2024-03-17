@@ -14,8 +14,10 @@ To run podmem▸ locally on your machine:
 2. Install the required dependencies by running `pip install -r requirements.txt`.
 3. Install a local MYSQL database **[here](https://dev.mysql.com/downloads/installer/)** 
 4. Set up a .env file with the neccessary API keys from `config.py`
-5. Run the Flask application in debug mode by executing `flask --app main run --debug`.
+5. Run `main.py` to initialise the database and run the app
 6. Access the application by navigating to `http://localhost:5000` in your web browser.
+7. After running the app the first time it is recommended to execute `flask --app main run --debug` rather than running it straight from `main.py`.
+
 
 ## Usage
 1. Enter the URL of the YouTube video you want to generate flashcards from.
