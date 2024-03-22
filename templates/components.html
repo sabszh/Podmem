@@ -1,0 +1,10 @@
+{% macro dropdown_href(name,labels=[],hrefs=[],styleClass="") -%}
+<span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false">
+    <a class = "button inverse {{styleClass}}" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{name}}<img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+    <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition x-cloak>
+        {%- for label in labels -%}
+        <a class = "item" href = "{{ hrefs[loop.index-1] }}"> {{label}} </a>
+        {% endfor %}
+    </div>
+</span>
+{%- endmacro %}

@@ -1,0 +1,22 @@
+{% import 'components.html' as components %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+
+    <div id = "table-wrapper">
+        <h1 class = "big"> Saved Decks – {{current_user.username}} </h1>
+        <span class = "small">Edit, practice or export your saved decks.</span>
+        <div class = "table">
+            {% for item in decks %}
+                <div class = "item">
+                    <span class = "name">{{item.title}} <br><span class = "channel">{{item.channel}}</span></span>
+                    <span class = "button-wrapper"><a class = "button">Practice</a>
+                    {{ components.dropdown_href("Actions", ["Edit", "Delete"], ["/view_userdeck/"~item.id, "/delete_userdeck/"~item.id]) }} 
+                </div>
+            {% endfor %} 
+        </div>
+    </div>    
+    
+{% endblock %}

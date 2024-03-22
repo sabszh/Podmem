@@ -9,5 +9,3 @@ db = SQLAlchemy()
 
 # Initializing Flask app with SQLAlchemy
 db.init_app(app)
-
-

@@ -7,6 +7,7 @@
 }
 
 body {
+    overflow-x: hidden;
     background: #F4F7FD;
     margin: 0;
     padding-bottom: 5rem;
@@ -44,16 +45,28 @@ footer span {
 }
 
 header {
-    margin-bottom: 9rem; 
+    margin-top: 3rem;
+    margin-bottom: 2rem; 
     display: inherit;
     grid-column: main;
-    height: 100%;
+    height: fit-content;
+    box-sizing: border-box;
     grid-auto-flow: column;
+    padding-left: 5%;
+    padding-right: 5%;
 }
 
-header >*{
+header .header-wrapper{
+    background:white;
     display: flex;
     align-self: center; 
+    justify-content: space-between;
+    padding: 0.5rem 0.5rem 0.5rem 2rem;
+    border: solid 3px black;
+    box-shadow: 3px 2px 0px 0px black;  
+    border-radius: 2rem;
+    flex-flow: nowrap;
+    align-items: center;
 }
 
 header .logo {
@@ -61,10 +74,11 @@ header .logo {
 }
 
 header .logo img {
-    width: 8rem;  
+    width: 6.5rem;  
+    margin-top: 5px;
 }
 
-header .login img {
+header .login .hamburger {
     display: none;
 }
 
@@ -72,29 +86,144 @@ header .login {
     justify-self: right;
 }
 
-.login button {
-    height: min-content;
-    border-width: 3px;
-    border: solid;
-    border-color: black;
-    margin-left: 1rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.8rem 1.6rem 0.8rem 1.6rem; 
+header .dropdown .item {
+    font-size: 1rem;
 }
 
-.login button.inverse:hover {
-    border-color: black;
+.login .button {
+    border-radius: 2rem;
     color: white;
+    height: min-content;
+    box-shadow: none;
+    margin-left: 1rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 0.8rem 1.6rem 0.8rem 1.6rem;
+}
+
+.login .button.inverse {
+    border-radius: 0.5rem;
+    background: #dfdfdf;
+    border: none;
+}
+
+.login .button.inverse:hover {
+    border-color: black;
+    transform: none;
+    background: #FF6060;
+}
+
+.login .button.account img {
+    filter: invert(100%); 
+}
+
+#login-wrapper {
+    display: inherit;
+    grid-column: main;
+    grid-template-rows: auto 1fr; 
+}
+
+#login-wrapper button {
+    margin-top: 2rem;
+    width: 100%;
+}
+
+#login-wrapper form {
+    background: #eaff9d;
+    border-radius: 2rem;
+    justify-self: center;
+    width: min(100%, 25rem);
+    border: solid 3px black;
+    padding: 2rem 2rem 2rem 2rem;
+    box-shadow: 3px 2px 0px 0px black;
+    box-sizing: border-box;
+}
+
+#login-wrapper .alert {
+    margin-top: 1.5rem;
+    font-weight: 800;
+}
+
+#login-wrapper input[type=text], 
+#login-wrapper input[type=email],
+#login-wrapper input[type=password] {
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 1rem;
+    border-width: 3px;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 3px 2px 0px 0px black;
+}
+
+#login-wrapper h1 {
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+#login-wrapper span {
+    display: inline-block;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+#login-wrapper span.terms{
+    margin-top: 0;
+    margin-right: 0;
+}
+
+#login-wrapper a {
+    display: inline-block;
+    margin-top: 2rem;
+    margin-right: 1rem;
+}
+
+
+#circle-bg {
+    position: absolute;
+    top: 0;
+    width: clamp(70rem, 130vh, 500vw);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -80%);
+    z-index: -999;
+}
+
+.bg-decorator {
+    position: absolute;
+    z-index: -99;
 }
 
 #hero-wrapper {
     display: inherit;
     grid-column: main;
     height: 100%;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
     grid-template-rows: auto 1fr; 
+}
+
+#hero-wrapper .big .frame {
+    display: inline-block;
+    rotate: 3deg;
+    padding: 0.5rem;
+    z-index: -999;
+    background: #19e884;
+} 
+
+#hero-wrapper .small.frame {
+    box-shadow: none;
+    background: white;
+    border: none;
+    background: none;
+}
+
+#hero-wrapper .frame {
+    padding: 0.8rem;
+    justify-self: center;
+    rotate: 2deg;
 }
 
 #hero-wrapper .small {
@@ -114,17 +243,24 @@ body.show_flashcards #hero-wrapper h1 {
     padding-right: 6rem;
 }
 
-#video-titledata-wrapper .small {
-    margin-top: 2rem;
-    font-size: 1.5rem;
+#video-titledata-wrapper >div {
+    display: inline-block;
+    text-align: center;
+    margin-top: 0;
 }
 
 #video-titledata-wrapper .button {
-    margin-left: 1rem;
+    margin: 0 1rem 0 1rem;
+    margin-top: 2rem;
+}
+
+#video-titledata-wrapper .small {
+    font-size: 1.5rem;
+    align-self: center;
 }
 
 #search-wrapper {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     margin-bottom: 3rem;
     display: inherit;
     grid-column: main;
@@ -141,6 +277,57 @@ body.show_flashcards #hero-wrapper h1 {
 
 #search-wrapper button:hover {
     background: #FF6060;
+}
+
+#table-wrapper {
+    display: inherit;
+    grid-column: main;
+    grid-template-rows: auto 1fr; 
+    border-radius: 1rem;
+}
+
+#table-wrapper .table {
+    margin-top: 4rem;
+}
+
+.table >.item {
+    box-sizing: border-box;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    border: solid 3px black;
+    padding: 2rem;
+    display: flex;
+    box-shadow: 3px 2px 0px 0px black;
+    background: white;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.table >.item .button-wrapper {
+    align-self: center;
+    justify-content: right;
+}
+
+.table >.item .button {
+    margin-left: 1rem;
+    font-size: 1rem;
+    padding: 1rem;
+}
+
+.table >.item:nth-child(2n) {
+    background: #eaff9d;
+}
+
+#table-wrapper .table >.item .name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 1rem;
+    max-width: 60%;
+}
+
+#table-wrapper .table >.item .channel {
+    font-size: 1rem;
+    font-weight: 300;
 }
 
 #export-wrapper {
@@ -280,7 +467,6 @@ body.show_flashcards #hero-wrapper h1 {
 }
 
 .dropdown-wrapper .button img {
-
     width: 0.6rem;
     margin-left: 0.3rem;
 }
@@ -290,6 +476,7 @@ body.show_flashcards #hero-wrapper h1 {
 }
 
 .dropdown {
+    z-index: 999;
     width: min-content;
     text-align: left;
     background: white;
@@ -297,7 +484,7 @@ body.show_flashcards #hero-wrapper h1 {
     font-weight: 300;
     font-size: 1.2rem;
     border: solid;
-    border-width: 3px;
+    border-width: 3px 3px 3px 3px;
     border-color: black;
     border-radius: 0rem 0rem 1rem 1rem;
     box-shadow: 3px 2px 0px 0px black;
@@ -305,6 +492,8 @@ body.show_flashcards #hero-wrapper h1 {
 }
 
 .dropdown .item {
+    font-weight: 500;
+    display: block;
     width: 100%;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -314,12 +503,22 @@ body.show_flashcards #hero-wrapper h1 {
 }
 
 .dropdown .item:last-child {
-    border-radius: 0 0 0.9rem 0.9rem;
+    border-radius: 0 0 0.7rem 0.7rem;
 }
 
 .dropdown .item:hover {
-    background: #FF6060;
+    background: black;
+    color: white;
     cursor: pointer;
+}
+
+.tooltip {
+    padding: 1rem;
+    color: black;
+    background: white;
+    border: 3px solid black;
+    box-shadow: 3px 2px 0px 0px black;
+    border-radius: 1rem;
     font-weight: 700;
 }
 
@@ -373,13 +572,15 @@ a, a:visited, a:active {
     font-weight: 800;
     text-decoration: none;
     transition: 0.2s;
+    color: black;
 }
 
 a:not(.button):hover {
     color: #FF6060;
 }
 
-button, .button {
+button, .button, a.button {
+    display: inline-block;
     background: #626262;
 	color: white;
 	border-width: 3px;
@@ -396,15 +597,16 @@ button, .button {
     text-decoration: none;
     transition: 0.2s;
     box-shadow: 3px 2px 0px 0px black;
+    animation-timing-function: ease-in;
 }
 
-button.black, .button.black {
+button.black, .button.black, a.button.black {
     background: black;
     box-shadow: none;
     border: none;
 }
 
-button.inverse, .button.inverse {
+button.inverse, .button.inverse, a.button.inverse {
     background: white;
     color: black;
     border: solid;
@@ -420,6 +622,11 @@ button:not(.loading):hover, .button:not(.loading):hover{
 button.black:hover, .button.black:hover {
     background: #FF6060;
     transform: none;
+}
+
+.button.inverse:hover, button.inverse:hover {
+    color: white;
+    border-color: black;
 }
 
 button img, .button img {
@@ -480,7 +687,7 @@ button img, .button img {
     font-style: italic;
 }
 
-input[type=text] {
+input[type=text], input[type=password], input[type=email] {
     justify-self: center;
     width: 100%;
     padding-left: 4.3rem;
@@ -489,11 +696,15 @@ input[type=text] {
     font-size: 1.2rem;
     font-weight: 200;
     color: black;
-    border-radius: 0.6rem 0rem 0rem 0.6rem;
+    border-radius: 2rem 0rem 0rem 2rem;
     border-width: 3px 0px 3px 3px; 
     border-color: black;
     outline: none;
     border-style: solid;
+}
+
+input[type=checkbox] {
+    box-shadow: none;
 }
 
 select {
@@ -554,7 +765,7 @@ select:hover {
 
 .submit {
     padding: 1rem 1.3rem 0.9rem 1.5rem; 
-    border-radius: 0rem 0.6rem 0.6rem 0rem;
+    border-radius: 0rem 2rem 2rem 0rem;
     border-width: 3px 3px 3px 0px; 
     border-color: black;
     border-style: solid;
@@ -597,6 +808,15 @@ select:hover {
     bottom: 2px;
 }
 
+.frame {
+    border-radius: 1rem;
+    background: #FF6060;
+    padding: 1.5rem;
+    border: solid 3px black;
+    box-shadow: 3px 2px 0px 0px black;  
+    width: fit-content;
+}
+
 .small {
     font-size: 1.7rem;
     line-height: 1.8rem;
@@ -614,7 +834,7 @@ select:hover {
 .big {
     display: inline;
     font-size: 3.5rem;
-    font-size: clamp(2.5rem, 10vw, 3.5rem);
+    font-size: clamp(2.5rem, 10vw, 3.7rem);
     line-height: clamp(3rem, 12vw, 4.5rem);
     font-weight: 900; 
     text-align: center;
@@ -629,11 +849,24 @@ select:hover {
     display: none;
 }
 
+
+@media screen and (min-width: 1900px) {
+    :root {
+        font-size: 20px;
+    }
+
+}
+
+@media screen and (max-width: 1600px) {
+    #circle-bg {
+        width: clamp(100rem, 150vh, 500vw);
+    }   
+}
+
 @media screen and (max-width: 1200px) {
     :root {
         font-size: 16px;
     }
-
 }
 
 @media screen and (max-width: 900px) {
@@ -655,6 +888,14 @@ select:hover {
     .popup {
         width: auto;
         left: 5%; 
+    }
+
+    header {
+        padding: 0;
+    }
+
+    header .header-wrapper{
+        padding-right: 2rem;
     }
 
     #video-titledata-wrapper span button {
@@ -684,11 +925,11 @@ select:hover {
         padding: 0;
     }
     
-    header .login button {
+    header .login .button {
         display: none;
     }
 
-    header .login img {
+    header .login .hamburger {
         display: block;
         width: 2.5rem;
     }

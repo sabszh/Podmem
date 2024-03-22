@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+
+    <div id = "login-wrapper">
+        <form name = "login-form" action = "{{ url_for('auth.login') }}" method="POST">
+            <h1> Sign in</h1>
+            <span> Don't have an account? <a href = "/signup" style = "margin-top: 0; margin-bottom: 1.5rem;">Sign up</a></span><br>
+            <span> Username </span> <br>
+            <input type = "text" name = "username" placeholder = "Your username"> <br>
+            <span> Password </span> <br>
+            <input type = "password" name = "password" placeholder = "Your password"> <br>
+            <span class = "terms"> <input type = "checkbox" name = "remember"> Remember me </span>
+            <button> Sign in </button> <br>
+            <a href = ""> Forgot your password? </a>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <span class="red alert">
+                    {{ messages[0] }}
+                </span>
+            {% endif %}
+            {% endwith %}
+        </form>
+    </div>    
+    
+{% endblock %}

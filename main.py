@@ -1,8 +1,21 @@
+from flask_login import LoginManager
 from app import app, db
+from auth.views import auth_bp
 from views import *
 from models import *
 import config
 import pymysql
+
+#auth init
+app.register_blueprint(auth_bp)
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return User.query.get(int(user_id))
 
 #create db
 def create_db(name : str):
@@ -35,6 +48,5 @@ def create_tables():
         db.create_all()
 
 if __name__ == '__main__':
-    create_db(config.DB_NAME)    
     create_tables()
     app.run()

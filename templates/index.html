@@ -4,11 +4,13 @@
 
     {{ super() }}
 
-    <div id = "hero-wrapper">
-      <h1 class = "big">Generate automatic <span class = "red">flashcards</span> from YouTube.</h1>
-      <span class = "small">Export to Anki, Brainscape or Quizlet.</span>
+    <img src = "{{ url_for('static', filename='images/yellow_circle.svg') }}" alt = "Yellow Circle" id ="circle-bg">
+    <!-- <img src = "{{ url_for('static', filename='images/q_card.svg') }}" alt = "Mini Flashcard" class = "bg-decorator" style = "width: 10rem; left: 20%; rotate: -10deg; top: 20%;">
+    <img src = "{{ url_for('static', filename='images/a_card.svg') }}" alt = "Mini Flashcard" class = "bg-decorator" style = "width: 6rem; left: 16%; rotate: -10deg; top: 30%;"> !-->
+    <div id = "hero-wrapper" x-data = "{show: false} ">
+      <h1 class = "big">Easy <span class = "frame">flashcards</span> from YouTube videos.</h1>
+      <span class = "small frame">Export to <b>Anki</b>, <b>Brainscape</b> or <b>Quizlet</b>.</span>
     </div>  
-
 
     {% block javascript %}
     <script type="text/javascript">
@@ -43,18 +45,18 @@
     {% endblock %}    
 
     <div id = "search-wrapper">
-      <form x-data = "url_input" action = "{{ url_for('flashcards') }}" class = "url-form" method="post" name = "url-form" x-effect = "validateInput" :onsubmit="validate ? 'return true' : 'return false'">
+      <form x-data = "url_input" action = "{{ url_for('flashcards') }}" class = "url-form" method="post" name = "url-form" x-effect = "validateInput" :onsubmit="validate ? 'return true' : 'return false'" @pageshow.window="loading = false">
           <div class = "url-input">
               <img @click = "settings = !settings" class = "settings-icon clickable" src = "{{ url_for('static', filename='images/settings.svg') }}" alt = "Settings Icon">
               <input type = "text" name = "video-url" placeholder = "Paste YouTube URL" x-model="input"><br>
               <input type = "checkbox" class = "honey" name = "terms">
-              <button x-cloak @click = "if(validate){loading=true}else{display_error=true}" :class="loading ? 'submit loading' : 'submit'"><img x-show="!loading" src = "{{ url_for('static', filename='images/arrow_submit.svg') }}" alt = "Arrow Icon"><img x-transition.opacity.duration.500ms x-show="loading" x-cloak src = "{{ url_for('static', filename='images/loading.svg') }}" alt = "Arrow Icon"></button>
+              <button x-cloak @click = "if(validate){loading=true}else{display_error=true}" :class="loading ? 'submit loading' : 'submit'"><img x-cloak x-show="!loading" src = "{{ url_for('static', filename='images/arrow_submit.svg') }}" alt = "Arrow Icon"><img x-transition.opacity.duration.500ms x-show="loading" x-cloak src = "{{ url_for('static', filename='images/loading.svg') }}" alt = "Arrow Icon"></button>
           </div>
           <input type = "input" class = "honey" name = "surname">
           <div class="settings-dropdown" x-cloak x-show="settings" x-transition>
               <style> select {background-image: url("{{ url_for('static', filename='images/arrow_select.svg')}}");} </style>
               <select name = "amount">
-                  <option disabled selected value>Amount</option>
+                  <option disabled value>Amount</option>
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
                   <option value="high">High</option>

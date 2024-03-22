@@ -26,11 +26,27 @@
     <body class = "{{body_tag}}">
 
         {% block body %}
-            <header id = "header-wrapper">
-                <a href = "index" class = "logo" ><img src = "{{ url_for('static', filename='images/logo.svg') }}" alt = "Podmem Logo"></a>
-                <div class = "login">
-                    <img src = "{{ url_for('static', filename='images/hamburger.svg') }}" alt = "Hamburger Menu">
-                    <button> Log in </button> <button class = "inverse"> Register </button>
+            <header>
+                <div class = "header-wrapper">
+                    <a href = "{{url_for('index')}}" class = "logo" ><img src = "{{ url_for('static', filename='images/logo.svg') }}" alt = "Podmem Logo"></a>
+                    <div class = "login">
+                        <img src = "{{ url_for('static', filename='images/hamburger.svg') }}" class = "hamburger" alt = "Hamburger Menu">
+
+                        {% if current_user.is_authenticated %}
+                        <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false">
+                            <a class = "button account black" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{current_user.username}} <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+                            <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition x-cloak>
+                                <a class = "item" href = ""> Practice </a>
+                                <a class = "item" href = "{{ url_for('dashboard') }}"> My Decks </a>
+                                <a class = "item" href = "{{ url_for('auth.logout') }}"> Log out </a>
+                            </div>
+                        </span>
+                        {% else %}
+                            <a class = "button inverse" href = "/login"> Log in </a>
+                            <a class = "button black" href = "/signup" class = "inverse"> Register </a>
+                        {% endif %}
+
+                    </div>
                 </div>
             </header>         
         {% endblock %}
