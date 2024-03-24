@@ -29,7 +29,10 @@ def flashcards():
         if honey_check or honey_input != "": return render_template("base.html")
 
         if video_url != None:
+            #split the URL based on "v=" paramater
             video_id = video_url.split("v=", 1)[1]
+            # Check if there are additional paramters after video ID and remove them
+            video_id = video_id.split("&", 1)[0]
             #look in db to see if video already has been prompted
             video_match = models.Sessions.query.filter_by(video_id=video_id).first()
             if video_match:
