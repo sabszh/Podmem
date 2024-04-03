@@ -1,0 +1,28 @@
+{% import 'components.html' as components %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+  {{ super() }}
+  <div class = "full-wrapper {{header_color}} padding-bot">
+    <div id = "video-titledata-wrapper">
+      {% if deck_id is defined %}
+      {% else %}
+      <h1 class="big"> Study all your decks </h1>
+      <span class = "small"> The algorithm will calculate which cards you need to study.</span>
+      {% endif %}
+    </div>
+  </div>
+  {{ components.wave() }}
+
+  {% if deck_id is defined %}
+  <div hx-get = "/review_deck/{{deck_id}}/0" hx-trigger="load" class = "main-wrapper negative-margin" x-data="{showAnswer: false, showEval: false}">
+    {{ components.loading_indicator() }}
+  </div>
+  {% else %}
+  <div hx-get = "/review/-1/{{starting_card_id}}" hx-trigger="load" class = "main-wrapper negative-margin" x-data="{showAnswer: false, showEval: false}">
+    {{ components.loading_indicator() }}
+  </div>
+  {% endif %}
+
+{% endblock %}

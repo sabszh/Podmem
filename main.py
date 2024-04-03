@@ -1,5 +1,4 @@
-from flask_login import LoginManager
-from app import app, db
+from app import app, db, limiter, login_manager
 from auth.views import auth_bp
 from views import *
 from models import *
@@ -8,9 +7,12 @@ import pymysql
 
 #auth init
 app.register_blueprint(auth_bp)
-login_manager = LoginManager()
+
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
+
+#limiter 
+limiter.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):

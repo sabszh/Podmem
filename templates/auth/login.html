@@ -1,28 +1,24 @@
-{% extends 'base.html' %}
-
-{% block body %}
-
-    {{ super() }}
-
+<div x-cloak class = "popup window login" x-data = "{open: false}" x-trap = "open" x-show = "open" x-transition.opacity.duration.100ms x-init="open=true">
+    <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
     <div id = "login-wrapper">
-        <form name = "login-form" action = "{{ url_for('auth.login') }}" method="POST">
+        {% if current_user.is_authenticated %}
+        <h1> You are already logged in! </h1> 
+        <button class = "light-green notranslate" @click = 'window.location.href="/dashboard"'>Go to dashboad</button>
+        {% else %}
+        <form name = "login-form" hx-post = "{{ url_for('auth.login') }}" hx-target = ".red.alert" method="POST">
             <h1> Sign in</h1>
-            <span> Don't have an account? <a href = "/signup" style = "margin-top: 0; margin-bottom: 1.5rem;">Sign up</a></span><br>
             <span> Username </span> <br>
             <input type = "text" name = "username" placeholder = "Your username"> <br>
             <span> Password </span> <br>
             <input type = "password" name = "password" placeholder = "Your password"> <br>
             <span class = "terms"> <input type = "checkbox" name = "remember"> Remember me </span>
-            <button> Sign in </button> <br>
-            <a href = ""> Forgot your password? </a>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <span class="red alert">
-                    {{ messages[0] }}
-                </span>
-            {% endif %}
-            {% endwith %}
+            <button class = "light-green"> Sign in </button> <br>
+            <a style = "display: none;" href = ""> Forgot your password? </a>
+            <span class="red alert">
+            </span>
         </form>
-    </div>    
+        {% endif %}
+    </div>
     
-{% endblock %}
+</div>    
+    

@@ -1,0 +1,35 @@
+<div id = "flashcard-wrapper">
+  <div x-data>
+    {% for card in cards %}
+      <div class = "flashcard" x-data="{ value: {{loop.index}} }" x-show="activeSlide === value" x-cloak>
+        <div> 
+          <span class = "letter">Q: </span>
+          <span contenteditable="true" >
+            {{card.question}}
+          </span>
+        </div>
+      </div>
+      <div class = "flashcard answer" x-data="{ value: {{loop.index}} }" x-show="activeSlide === value" x-cloak>
+        <div>
+          <span class = "letter">A: </span>
+          <span x-show ="showAnswer">
+            {{card.answer}}
+          </span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<div id = "nav-wrapper" class = "study">
+  <div x-data>
+    <button @click = "showAnswer = true; showEval = true" x-show = "!showEval"> Reveal </button>
+  </div>
+  <div x-data x-show = "showEval">
+    <p class = "small">How well did you know the answer?</p> <br> 
+    <div style = "display: block;">
+      {% for rating_btn in [1,2,3,4,5] %}
+      <a hx-get="/review/{{card.id}}/{{loop.index}}" hx-swap="none" class = "button eval-rating" x-text="value" @click="if (activeSlide < slideLength){activeSlide += 1; showEval=false; showAnswer=false;}"></a>
+      {% endfor %}
+    </div>
+  </div>
+</div>

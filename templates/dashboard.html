@@ -4,19 +4,24 @@
 {% block body %}
 
     {{ super() }}
-
-    <div id = "table-wrapper">
-        <h1 class = "big"> Saved Decks – {{current_user.username}} </h1>
-        <span class = "small">Edit, practice or export your saved decks.</span>
+    <div class = "full-wrapper {{header_color}} padding-bot">
+        <div id = "table-wrapper">
+            <h1 class = "big"> Saved Decks – {{current_user.username}} </h1>
+            <span class = "small">Edit, practice or export your saved decks.</span>
+        </div>
+    </div>  
+    {{components.wave()}}
+    <div id= "table-wrapper">
         <div class = "table">
             {% for item in decks %}
                 <div class = "item">
-                    <span class = "name">{{item.title}} <br><span class = "channel">{{item.channel}}</span></span>
-                    <span class = "button-wrapper"><a class = "button">Practice</a>
+                    <span class = "name">{{item.video.title}} <br><span class = "channel">{{item.video.channel}}</span></span>
+                    <span class = "button-wrapper"><a href = "{{url_for('study_deck', id = item.id)}}"class = "button light-green">Study</a>
                     {{ components.dropdown_href("Actions", ["Edit", "Delete"], ["/view_userdeck/"~item.id, "/delete_userdeck/"~item.id]) }} 
+                    </span>
                 </div>
             {% endfor %} 
         </div>
-    </div>    
+    </div> 
     
 {% endblock %}

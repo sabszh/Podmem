@@ -1,10 +1,43 @@
 {% macro dropdown_href(name,labels=[],hrefs=[],styleClass="") -%}
 <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false">
-    <a class = "button inverse {{styleClass}}" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{name}}<img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+    <a class = "button inverse {{styleClass}} notranslate" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{name}}<img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
     <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition x-cloak>
         {%- for label in labels -%}
         <a class = "item" href = "{{ hrefs[loop.index-1] }}"> {{label}} </a>
         {% endfor %}
     </div>
 </span>
+{%- endmacro %}
+
+{% macro loading_indicator() -%}
+    <div class = "grid-main">
+        <img class="htmx-indicator" src="{{ url_for('static', filename='images/loading.svg')}}">
+    </div>
+{%- endmacro %}
+
+{% macro wave() -%}
+    <style> .wave {background-image: url("{{ url_for('static', filename='images/wave.svg')}}"); height: 5rem;} </style>
+    <div class = "full-wrapper wave"></div> 
+{%- endmacro %}
+
+{% macro popup_window() -%}
+    <div x-cloak class = "popup window" x-data = "{open: false}" x-trap = "open" x-show = "open" x-transition.opacity.duration.100ms x-init="open=true">
+        <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
+        <div> {{ caller() }} </div>
+    </div>
+{%- endmacro %}
+
+{% macro popup() -%}
+    <div x-cloak class = "popup" x-data = "{open: false}" x-show = "open" x-transition.opacity.duration.500ms x-init="setTimeout(() => open = true, 5000)">
+        <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
+        {{ caller() }}
+    </div>
+{%- endmacro %}
+
+{% macro survey_popup() -%}
+    {% call popup() %}
+        <h3 class =  "small"> We Need Feedback!</h3>
+        <p> Podmem is a university project. Help us out by answering our research questionare. <br> <br> We would be eternally grateful!</p>
+        <a href = "https://docs.google.com/forms/d/1X5nJlEB9_hOrMPa4wVWJJHscZNU54mmBIgCvlqSBGmY/viewform?edit_requested=true" target="_blank"><button class = "light-green"> Participate </button></a>
+    {% endcall %}
 {%- endmacro %}

@@ -1,0 +1,37 @@
+{% import 'components.html' as components %}
+
+<div id = "flashcard-wrapper" class = "no-margin">
+    <div>
+        <div class = "flashcard single" x-cloak>
+            <div> 
+                <span class = "question">
+                    <b>Q:</b> {{card.question}}
+                </span>
+                <span class = "answer" x-show ="showAnswer">
+                    <b>A:</b> {{card.answer}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <p style = "font-style: italic; "> <b>Video:</b> {{card.deck.video.title}} </p>
+</div>
+
+<div id = "nav-wrapper" class = "study">
+    <div x-data>
+        <button class = "light-green" @click = "showAnswer = true; showEval = true" x-show = "!showEval"> Reveal </button>
+    </div>
+    <div x-data x-show = "showEval">
+        <p class = "small">How well did you know the answer?</p> <br> 
+        <div class = "rating-buttons">
+            {% for rating_btn in [0,1,2,3,4,5] %}
+                {% if deck_id is defined %}
+                <a hx-get="/review_deck/{{deck_id}}/{{new_index}}" hx-target=".main-wrapper" class = "button eval-rating" @click="showEval=false; showAnswer=false;">{{rating_btn}}</a>
+                {% else %}
+                <a hx-get="/review/{{rating_btn}}/{{card.id}}" hx-target=".main-wrapper" class = "button eval-rating" @click="showEval=false; showAnswer=false;">{{rating_btn}}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{{ components.loading_indicator() }}

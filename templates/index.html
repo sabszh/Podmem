@@ -1,94 +1,95 @@
+{% import 'components.html' as components %}
 {% extends 'base.html' %}
 
 {% block body %}
 
-    {{ super() }}
+{{ super() }}
 
-    <img src = "{{ url_for('static', filename='images/yellow_circle.svg') }}" alt = "Yellow Circle" id ="circle-bg">
-    <!-- <img src = "{{ url_for('static', filename='images/q_card.svg') }}" alt = "Mini Flashcard" class = "bg-decorator" style = "width: 10rem; left: 20%; rotate: -10deg; top: 20%;">
-    <img src = "{{ url_for('static', filename='images/a_card.svg') }}" alt = "Mini Flashcard" class = "bg-decorator" style = "width: 6rem; left: 16%; rotate: -10deg; top: 30%;"> !-->
-    <div id = "hero-wrapper" x-data = "{show: false} ">
-      <h1 class = "big">Easy <span class = "frame">flashcards</span> from YouTube videos.</h1>
-      <span class = "small frame">Export to <b>Anki</b>, <b>Brainscape</b> or <b>Quizlet</b>.</span>
-    </div>  
-
-    {% block javascript %}
-    <script type="text/javascript">
-      document.addEventListener("alpine:init", () => {
-        Alpine.data("url_input", () => ({
-          validate: false,
-          input: '',
-          settings: false,
-          loading: false,
-          error_message: "",
-          display_error: false,
-          validateInput() {
-            input = this.input
-            if (input == "") {
-              this.validate = false;
-              this.error_message = "Field is empty"
-              console.log(this.validate)
-            }
-            else if (!input.includes("youtube.com/watch?v=")) {
-              this.validate = false;
-              this.error_message = "Invalid URL"
-              console.log(this.validate)
-            }
-            else {
-              this.validate = true;
-              this.display_error = false;
-            }
-          }           
-        }));
-      });
-    </script>
-    {% endblock %}    
-
-    <div id = "search-wrapper">
-      <form x-data = "url_input" action = "{{ url_for('flashcards') }}" class = "url-form" method="post" name = "url-form" x-effect = "validateInput" :onsubmit="validate ? 'return true' : 'return false'" @pageshow.window="loading = false">
-          <div class = "url-input">
-              <img @click = "settings = !settings" class = "settings-icon clickable" src = "{{ url_for('static', filename='images/settings.svg') }}" alt = "Settings Icon">
-              <input type = "text" name = "video-url" placeholder = "Paste YouTube URL" x-model="input"><br>
-              <input type = "checkbox" class = "honey" name = "terms">
-              <button x-cloak @click = "if(validate){loading=true}else{display_error=true}" :class="loading ? 'submit loading' : 'submit'"><img x-cloak x-show="!loading" src = "{{ url_for('static', filename='images/arrow_submit.svg') }}" alt = "Arrow Icon"><img x-transition.opacity.duration.500ms x-show="loading" x-cloak src = "{{ url_for('static', filename='images/loading.svg') }}" alt = "Arrow Icon"></button>
-          </div>
-          <input type = "input" class = "honey" name = "surname">
-          <div class="settings-dropdown" x-cloak x-show="settings" x-transition>
-              <style> select {background-image: url("{{ url_for('static', filename='images/arrow_select.svg')}}");} </style>
-              <select name = "amount">
-                  <option disabled value>Amount</option>
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-              </select>
-
-              <select name = "difficulty">
-                  <option disabled selected value>Difficulty</option>
-                  <option value="low">Easy</option>
-                  <option value="medium">Average</option>
-                  <option value="high">Expert</option>
-              </select>
-          </div>
-
-          <div class = "error-message" x-transition x-show = "display_error" x-text = "error_message" x-cloak x-init="setTimeout(() => display_error = false, 5000)"></div>
-      </form>
+<div class = "full-wrapper purple" classes = "add light-green">
+  <div id = "hero-wrapper" x-data = "{show: false} ">
+    <h1 class = "big fade-load" classes="remove fade-load:0s" hx-ext="class-tools">
+      <img src = "{{ url_for('static', filename='images/star1.svg') }}" alt = "star" class = "decoration fade-load" classes="remove fade-load:0.5s hx-ext="class-tools" classes = "toggle faded:3s" style = "position: absolute; margin-left: -7.5rem; margin-top: 10rem;">
+      Flashcards from <span class = "loud fade-load" classes="remove fade-load:0s">YouTube</span>
+      <img src = "{{ url_for('static', filename='images/star1.svg') }}" alt = "star" class = "decoration fade-load" classes="remove fade-load:0.3s hx-ext="class-tools" classes = "toggle faded:5s" style = "position: absolute; margin-left: 5rem; margin-top: -2rem; rotate: 20deg;">
+    </h1>
+    <span class = "small fade-load" hx-ext = "class-tools" classes="remove fade-load:0.2s">Generate high quality flashcards from videos. <br> Easily edit, study or export – <b>100%</b> free.</span>
   </div>  
 
-  <div id = "flashcard-wrapper">
+  {% block javascript %}
+  <script type="text/javascript">
+    document.addEventListener("alpine:init", () => {
+      Alpine.data("url_input", () => ({
+        validate: false,
+        input: '',
+        settings: false,
+        loading: false,
+        error_message: "",
+        display_error: false,
+        validateInput() {
+          input = this.input
+          if (input == "") {
+            this.validate = false;
+            this.error_message = "Field is empty"
+            console.log(this.validate)
+          }
+          else if (!input.includes("youtube.com/watch?v=")) {
+            this.validate = false;
+            this.error_message = "Invalid URL"
+            console.log(this.validate)
+          }
+          else {
+            this.validate = true;
+            this.display_error = false;
+          }
+        }           
+      }));
+    });
+  </script>
+  {% endblock %}    
 
-    <div x-data>
-      <div class = "flashcard">
-        <div><span class = "letter">Q: </span><span>Why use flashcards?</span></div>
-      </div>
-      <div class = "flashcard answer">
-        <div><span class = "letter">A: </span><span>The benefit of using flashcards is their effectiveness in aiding memorization and quick retrieval of information due to their concise format and repetition-based learning.</span></div>
-      </div>
-    </div>
-  </div>
+  <div id = "search-wrapper">
+    <form x-data = "url_input" action = "{{ url_for('flashcards') }}" class = "url-form" method="post" name = "url-form" x-effect = "validateInput" :onsubmit="validate ? 'return true' : 'return false'" @pageshow.window="loading = false">
+        <div class = "url-input fade-load" classes="remove fade-load:0.5s" hx-ext="class-tools">
+            <img @click = "settings = !settings" class = "settings-icon clickable" src = "{{ url_for('static', filename='images/settings.svg') }}" alt = "Settings Icon">
+            <input type = "text" name = "video-url" placeholder = "Paste YouTube URL" x-model="input"><br>
+            <input type = "checkbox" class = "honey" name = "terms">
+            <button x-cloak @click = "if(validate){loading=true}else{display_error=true}" :class="loading ? 'submit loading' : 'submit'"><img x-cloak x-show="!loading" src = "{{ url_for('static', filename='images/arrow_submit.svg') }}" alt = "Arrow Icon"><img x-transition.opacity.duration.500ms x-show="loading" x-cloak src = "{{ url_for('static', filename='images/loading.svg') }}" alt = "Arrow Icon"></button>
+        </div>
+        <input type = "input" class = "honey" name = "surname">
+        <div class="settings-dropdown" x-cloak x-show="settings" x-transition>
+            <style> select {background-image: url("{{ url_for('static', filename='images/arrow_select.svg')}}");} </style>
+            <select name = "amount">
+                <option disabled value>Amount</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
 
-  <div class = "donate">
-    <p class = "small">Want to help keep this service free?</p>
-    <a class = "button black" href = "flashcards">Donate a Coffee <img src = "{{ url_for('static', filename='images/coffee.svg') }}" alt = "Coffee Icon"></a>
+            <select name = "difficulty">
+                <option disabled selected value>Difficulty</option>
+                <option value="low">Easy</option>
+                <option value="medium">Average</option>
+                <option value="high">Expert</option>
+            </select>
+        </div>
+        <div class = "error-message" x-transition x-show = "display_error" x-text = "error_message" x-cloak x-init="setTimeout(() => display_error = false, 5000)"></div>
+    </form>
+  </div>  
+</div>
+{{components.wave()}}
+
+<div id = "image-text-split" class = "grid-main no-margin">
+  <div>
+    <h2> Don't let good knowledge <br> <span class ="loud">go to waste</span></h2>
+    <p> <b>Millions of hours</b> of educational content is consumed on YouTube daily. But how much of it is retained long term? We created this free tool to help remember the valuable things we learn by watching videos.</p>
+    <a href = "" hx-get = "{{url_for('auth.signup')}}" hx-swap = "beforeend" hx-target = "body" class = "button light-green"> Get started </a>
   </div>
+  <img src = "{{ url_for('static', filename='images/globe.svg') }}">
+</div>
+
+<div class = "donate">
+  <p class = "small">Want to help keep this service free?</p>
+  <a class = "button light-green" href = "flashcards">Donate a Coffee <img src = "{{ url_for('static', filename='images/coffee.svg') }}" alt = "Coffee Icon"></a>
+</div>
     
 {% endblock %}

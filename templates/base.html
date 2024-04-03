@@ -6,49 +6,62 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Podmem - YouTube to Flash Cards</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
+        <link rel="icon" href="{{ url_for('static', filename='images/logo_icon.svg') }}">
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <!-- HTMX -->
-        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-    
+        <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.11/dist/ext/class-tools.js"></script>
+
         <!-- Alpine Plugins -->
+        <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js"></script>
 
         <!-- Alpine.js -->
         <script src="//unpkg.com/alpinejs" defer></script>
+
+        <!-- Lottie -->
+        <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
     </head>
 
     <body class = "{{body_tag}}">
 
         {% block body %}
+        <div class = "full-wrapper {{header_color}}">
             <header>
                 <div class = "header-wrapper">
-                    <a href = "{{url_for('index')}}" class = "logo" ><img src = "{{ url_for('static', filename='images/logo.svg') }}" alt = "Podmem Logo"></a>
+                    <a href = "{{url_for('index')}}" class = "logo icon" ><img src = "{{ url_for('static', filename='images/logo_icon.svg') }}" alt = "Podmem Logo"></a>
+                    <a href = "{{url_for('index')}}" class = "logo" ><img src = "{{ url_for('static', filename='images/logo1.svg') }}" alt = "Podmem Logo"></a>
+
                     <div class = "login">
                         <img src = "{{ url_for('static', filename='images/hamburger.svg') }}" class = "hamburger" alt = "Hamburger Menu">
 
                         {% if current_user.is_authenticated %}
+                        <div class = "notifications" hx-get = "{{url_for('get_notification', type = 'count')}}" hx-target = ".notification-count" hx-trigger = "load" x-data = "{showTooltip: false}" @mouseover = "showTooltip = true" @mouseleave = "showTooltip = false">
+                            <a href = "{{url_for('study_all')}}"><img src = "{{ url_for('static', filename='images/bell.svg') }}" alt = "Bell Icon" x-ref = "tooltip"></a>
+                            <a href = "{{url_for('study_all')}}"><span class = "notification-count"></span></a>
+                            <span class = "tooltip" x-anchor.bottom.offset.10 = "$refs.tooltip" x-cloak x-transition x-show = "showTooltip" hx-get = "{{url_for('get_notification', type = 'message')}}" hx-trigger = "load" hx-target = "this"></span>
+                        </div>
                         <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false">
-                            <a class = "button account black" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{current_user.username}} <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+                            <a class = "button account black notranslate" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{current_user.username}} <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
                             <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition x-cloak>
-                                <a class = "item" href = ""> Practice </a>
+                                <a class = "item" href = "{{ url_for('study_all')}}"> Study </a>
                                 <a class = "item" href = "{{ url_for('dashboard') }}"> My Decks </a>
                                 <a class = "item" href = "{{ url_for('auth.logout') }}"> Log out </a>
                             </div>
                         </span>
                         {% else %}
-                            <a class = "button inverse" href = "/login"> Log in </a>
-                            <a class = "button black" href = "/signup" class = "inverse"> Register </a>
+                            <a class = "button inverse" hx-get = "{{url_for('auth.login')}}" hx-swap = "beforeend" hx-target = "body"> Log in </a>
+                            <a class = "button black" hx-get = "{{url_for('auth.signup')}}" hx-swap = "beforeend" hx-target = "body" class = "inverse"> Register </a>
                         {% endif %}
-
                     </div>
                 </div>
-            </header>         
+            </header>
+        </div>    
         {% endblock %}
 
         <footer>
@@ -56,6 +69,5 @@
                  podmem.com – all rights reserved.
             </span>
         </footer>  
-
     </body>
 </html>

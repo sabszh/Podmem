@@ -1,0 +1,116 @@
+{% import 'components.html' as components %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+
+    {% block javascript %}
+    <script type="text/javascript">
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("export_", () => ({
+          // Export flashcards for Anki format
+          export_file(seperator, file_name) {
+            let formattedData = "";
+            Alpine.store('carousel').cards.forEach(flashcard => {
+                formattedData += `"${flashcard.question}"${seperator}"${flashcard.answer}"\n`;
+            });
+            let blob = new Blob([formattedData], {type: "text/plain"});
+            let url = URL.createObjectURL(blob);
+            // Trigger download
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = file_name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }
+        }));
+      });
+    </script>
+    {% endblock %}    
+
+    <div id = "video-titledata-wrapper" x-data="export_">
+      <h1 class = "big">{{title}}</h1>
+      <div>
+        <span class = "small">Video by {{channel}}</span>
+        <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false" style = "display: inline-block;">
+          <a class = "button inverse" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">Export <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+          <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition>
+            <div class = "item" @click="export_file(`${';'}`, `${'flashcard_anki.txt'}`)"> Anki </div>
+            <div class = "item" @click="export_file(`${','}`, `${'flashcard_brainscape.csv'}`)"> Brainscape </div>
+            <div class = "item" @click="export_file(`${','}`, `${'flashcard_quizlet.csv'}`)"> Quizlet </div> 
+          </div>
+        </span>
+        <button name = "save" @click='
+        fetch("/save_deck/{{session_id}}", {
+          method: "POST",
+          headers: {
+              "Content-type": "application/json;"
+          },
+          body: JSON.stringify($store.carousel.cards) 
+        })
+        .then(function (response){
+          if(response.ok) {
+            response.json()
+            .then(function(response) {
+                console.log(response);
+            });
+          }
+          else {
+            throw Error("Something went wrong");
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });        
+        '>Save</button>
+      </div>
+    </div>  
+
+    <div class = "main-wrapper" x-data="{ activeSlide: 1, slideLength: {{cards|length}} }">
+      <div id = "flashcard-wrapper">
+        <div x-data="{showTooltip: false}" x-ref="tooltip">
+          <div class = "tooltip" x-anchor.bottom.offset.-20="$refs.tooltip" x-transition x-show = "showTooltip"> Click to edit </div>
+          {% for card in cards %}
+            <div class = "flashcard" @mouseover = "showTooltip=true;" @mouseleave= "showTooltip=false" x-data="{ value: {{loop.index}} }" x-show="activeSlide === value">
+              <div> 
+                <span class = "letter">Q: </span>
+                <span contenteditable="true" >
+                  {{card.question}}
+                </span>
+              </div>
+            </div>
+            <div class = "flashcard answer" @mouseover = "showTooltip=true;" @mouseleave= "showTooltip=false" x-data="{ value: {{loop.index}} }" x-show="activeSlide === value">
+              <div>
+                <span class = "letter">A: </span>
+                <span contenteditable="true">
+                  {{card.answer}}
+                </span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div id = "nav-wrapper">
+        <div x-data>
+          <img
+            class = "clickable"
+            src = "{{ url_for('static', filename='images/arrow_nav.svg') }}"
+            alt = "Left Arrow Icon"
+            @click="activeSlide = activeSlide === 1 ? slideLength : activeSlide - 1"
+          >
+          <span> <span  x-effect = "" x-text = "activeSlide + '/' + slideLength"></span> </span>
+          <img 
+            class = "clickable right"
+            src = "{{ url_for('static', filename='images/arrow_nav.svg') }}"
+            x-data="{canClick: true}"
+            @click="activeSlide = activeSlide === slideLength ? 1 : activeSlide + 1"
+          >
+        </div>
+      </div>
+    </div>
+
+    {{components.survey_popup()}}
+
+{% endblock %}

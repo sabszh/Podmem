@@ -20,3 +20,8 @@ class FlaskConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TRAP_HTTP_EXCEPTIONS = True
     SECRET_KEY = SECRET_KEY
+    MAIL_DEFAULT_SENDER = "postmaster@podmem.com"
+    MAIL_SERVER = "smtp.eu.mailgun.org"
+    MAIL_PORT = 587
+    MAIL_USERNAME = "postmaster@podmem.com"
+    MAIL_PASSWORD = "584cbc529c1a49f57e3b742d906f4fbf-309b0ef4-6d64f7c2" 

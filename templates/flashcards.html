@@ -1,3 +1,4 @@
+{% import 'components.html' as components %}
 {% extends 'base.html' %}
 
 {% block body %}
@@ -35,46 +36,55 @@
       });
     </script>
     {% endblock %}    
+    <div class = "full-wrapper {{header_color}} padding-bot">
+      <div id = "video-titledata-wrapper" x-data="export_">
+        <h1 class = "big">{{title}}</h1>
+        <div x-data = "{showTooltip: false}">
+          <span class = "small">Video by {{channel}}</span>
+          <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false" style = "display: inline-block;">
+            <a class = "button inverse" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">Export <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+            <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition>
+              <div class = "item" @click="export_file(`${';'}`, `${'flashcard_anki.txt'}`)"> Anki </div>
+              <div class = "item" @click="export_file(`${','}`, `${'flashcard_brainscape.csv'}`)"> Brainscape </div>
+              <div class = "item" @click="export_file(`${','}`, `${'flashcard_quizlet.csv'}`)"> Quizlet </div> 
+            </div>
+          </span>
 
-    <div id = "video-titledata-wrapper" x-data="export_">
-      <h1 class = "big">{{title}}</h1>
-      <div>
-        <span class = "small">Video by {{channel}}</span>
-        <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false" style = "display: inline-block;">
-          <a class = "button inverse" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">Export <img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
-          <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition>
-            <div class = "item" @click="export_file(`${';'}`, `${'flashcard_anki.txt'}`)"> Anki </div>
-            <div class = "item" @click="export_file(`${','}`, `${'flashcard_brainscape.csv'}`)"> Brainscape </div>
-            <div class = "item" @click="export_file(`${','}`, `${'flashcard_quizlet.csv'}`)"> Quizlet </div> 
-          </div>
-        </span>
-        <button name = "save" @click='
-        fetch("/save_deck/{{video_id}}/{{session_id}}", {
-          method: "POST",
-          headers: {
-              "Content-type": "application/json;"
-          },
-          body: JSON.stringify($store.carousel.cards) 
-        })
-        .then(function (response){
-          if(response.ok) {
-            response.json()
-            .then(function(response) {
-                console.log(response);
-            });
-          }
-          else {
-            throw Error("Something went wrong");
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });        
-        '>Save</button>
-      </div>
-    </div>  
+          {% if current_user.is_authenticated %}
 
-    <div id = "flashcard-wrapper">
+          <button id = "demo" class = "light-green" name = "save" @click='
+          fetch("/save_deck/{{session_id}}", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json;"
+            },
+            body: JSON.stringify($store.carousel.cards) 
+          })
+          .then(function (response){
+            if(response.ok) {
+              response.json()
+              .then(function(response) {
+                  console.log(response);
+              });
+            }
+            else {
+              throw Error("Something went wrong");
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });        
+          '>Save</button>
+          {% else %}
+          <button class = "nonclickable" x-ref = "save" style = "opacity: 0.2" @mouseover = "showTooltip=true;" @mouseleave= "showTooltip=false"> Save </button>
+          <div class = "tooltip" x-anchor="$refs.save" x-transition x-show = "showTooltip"> Log in to save </div>
+          {% endif %}
+        </div>
+      </div>  
+    </div>
+    {{ components.wave() }}
+
+    <div id = "flashcard-wrapper" class = "negative-margin">
       <div x-data="{showTooltip: false}" x-ref="tooltip">
         <div class = "tooltip" x-anchor.bottom.offset.-20="$refs.tooltip" x-transition x-show = "showTooltip"> Click to edit </div>
         <div class = "flashcard" @mouseover = "showTooltip=true;" @mouseleave= "showTooltip=false">
@@ -118,11 +128,6 @@
       </div>
     </div>
 
-    <div x-cloak class = "popup" x-data = "{open: false}" x-show = "open" x-transition.opacity.duration.500ms x-init="setTimeout(() => open = true, 5000)">
-      <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
-      <h3 class =  "small"> We Need Feedback!</h3>
-      <p> Podmem is a university project. Help us out by answering our research questionare. <br> <br> We would be eternally grateful!</p>
-      <a href = "https://docs.google.com/forms/d/1X5nJlEB9_hOrMPa4wVWJJHscZNU54mmBIgCvlqSBGmY/viewform?edit_requested=true" target="_blank"><button> Participate </button></a>
-    </div>
+    {{components.survey_popup()}}
 
 {% endblock %}
