@@ -110,6 +110,7 @@ def view_userdeck(id):
                 cards = userdeck.cards,
                 title = userdeck.video.title,
                 channel = userdeck.video.channel,
+                header_color = "purple"
             )
         else: 
             flash("You do not have access to this page.")
@@ -204,6 +205,40 @@ def review_card_in_deck(deck_id, index):
 
 
     return render_template("fragments/study_card.html", card = cards[index], new_index = new_index, deck_id = deck_id)
+
+@app.route("/view_card/<id>")
+@login_required
+def view_card(id):
+    card = models.UserCard.query.filter_by(id=id).first()
+    if card:
+        return render_template('fragments/user_card.html', card = card)
+
+@app.route("/delete_card/<id>", methods=['DELETE'])
+@login_required
+def delete_card(id):
+    card = models.UserCard.query.filter_by(id=id).first()
+    if card:
+        models.db.session.delete(card)
+        models.db.session.commit()
+        return ""
+
+@app.route("/update_card/<id>", methods=['POST'])
+@login_required
+def update_card(id):
+    card = models.UserCard.query.filter_by(id=id).first()
+    question = request.form.get("question")
+    answer = request.form.get("answer")
+    card.answer = answer
+    card.question = question
+    models.db.session.commit()
+    return render_template("fragments/user_card.html", card = card)
+
+@app.route("/create_card/<deck_id>", methods=['POST'])
+@login_required
+def create_card(deck_id):
+    id = models.add_usercard(deck_id, "", "", 0, 0, 0)
+    card = models.UserCard.query.filter_by(id=id).first()
+    return render_template("fragments/user_card.html", card = card, new = True)
 
 @app.route("/get_notification/<type>")
 @login_required

@@ -50,6 +50,7 @@ def add_usercard(deck_id, answer, question, easiness, interval, repetitions, due
     )
     db.session.add(user_card)
     db.session.commit()
+    return user_card.id
 
 class UserDeck(db.Model):
     __tablename__ = "user_deck"

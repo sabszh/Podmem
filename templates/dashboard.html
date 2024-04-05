@@ -15,7 +15,7 @@
         <div class = "table">
             {% for item in decks %}
                 <div class = "item">
-                    <span class = "name">{{item.video.title}} <br><span class = "channel">{{item.video.channel}}</span></span>
+                    <span class = "header">{{item.video.title}} <br><span class = "subheader">{{item.video.channel}}</span></span>
                     <span class = "button-wrapper"><a href = "{{url_for('study_deck', id = item.id)}}"class = "button light-green">Study</a>
                     {{ components.dropdown_href("Actions", ["Edit", "Delete"], ["/view_userdeck/"~item.id, "/delete_userdeck/"~item.id]) }} 
                     </span>
