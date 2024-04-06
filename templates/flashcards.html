@@ -119,7 +119,7 @@
         <img x-data="{canClick: true}" @click=
         "if ($store.carousel.cards.length - 1 > 0){
           if ($store.carousel.curCard + 1 > $store.carousel.cards.length - 1){ $store.carousel.curCard = $store.carousel.cards.length - 2;}
-          $store.carousel.cards.splice(curCard, 1);
+          $store.carousel.cards.splice($store.carousel.curCard, 1);
         }
         if ($store.carousel.cards.length == 1){canClick=false}"
         src = "{{ url_for('static', filename='images/trash.svg') }}" alt = "Trashcan Icon" :class = "canClick ? 'clickable' : 'nonclickable'" style = "margin-right: 0; margin-left: 1rem; width: 2.5rem;">

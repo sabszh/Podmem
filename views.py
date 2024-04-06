@@ -35,12 +35,12 @@ def flashcards():
             # Check if there are additional paramters after video ID and remove them
             video_id = video_id.split("&", 1)[0]
             #look in db to see if video already has been prompted
+            session = models.Sessions.query.filter(models.Sessions.video_id==video_id, models.Sessions.difficulty == diff, models.Sessions.amount == amount, models.Sessions.json_data != "").first() 
             video_match = models.Video.query.filter_by(video_id=video_id).first()
-            session = models.Sessions.query.filter_by(video_id=video_id).first() 
-            if video_match and session and session.difficulty == diff and session.amount == amount:
-                id = models.add_session(video_id, session.json_data, session.amount, session.difficulty)
+            if session:
+                id = models.add_session(video_id, "", session.amount, session.difficulty)
                 return render_template('flashcards.html', body_tag = "show_flashcards", flashcards_dumps = session.json_data, url = video_url, title = video_match.title, channel = video_match.channel, session_id = id, header_color = "purple")
-            else: #only generate new entry if video doesnt exist in db
+            else: #only generate new entry if exact prompt doesnt already exist in db
                 #transcribe video
                 try:
                     video_transcript = transcript.get_transcript(video_id)
@@ -56,7 +56,8 @@ def flashcards():
                 dict_list = [flashcard.return_dict() for flashcard in flashcards]
                 dict_list_json = json.dumps(dict_list)
                 #save analytics data 
-                models.add_video(video_id, video_info["title"], video_info["channel_title"], video_transcript)
+                if not video_match: #only add new video if it doesn't already exist
+                    models.add_video(video_id, video_info["title"], video_info["channel_title"])
                 id = models.add_session(video_id, dict_list_json, amount, diff)
                 return render_template('flashcards.html', body_tag = "show_flashcards", flashcards_dumps = dict_list_json, url = video_url, title = video_info["title"], channel = video_info["channel_title"], video_id = video_id, session_id=id, header_color = "purple")
         
@@ -76,24 +77,46 @@ def dashboard():
 @app.route("/save_deck/<session_id>", methods=['GET', 'POST'])
 @login_required
 def save_deck(session_id):
-
     session = models.Sessions.query.filter_by(id = session_id).first()
     if session:
+        #check if this session contains json – otherwise fetch "parent" session
+        if session.json_data == "":
+            parent_session = models.Sessions.query.filter(models.Sessions.video_id==session.video_id, models.Sessions.difficulty == session.difficulty, models.Sessions.amount == session.amount, models.Sessions.json_data != "").first()
+            og_json = json.loads(parent_session.json_data)
+        else:
+            og_json = json.loads(session.json_data)
+
         userdeck = models.UserDeck.query.filter_by(user_id = current_user.id, video_id=session.video_id).first()      
         json_data = request.get_json()
         if json_data:
+            edited = False
             if userdeck: #overwrite non-matching entries if entry already exists
-                for i in range(len(userdeck.cards)):
-                    if json_data[i]["answer"] != userdeck.cards[i].answer or json_data[i]["question"] != userdeck.cards[i].question:
-                        userdeck.cards[i].answer = json_data[i]["answer"]
-                        userdeck.cards[i].question = json_data[i]["question"]
+                #check if cards have been edited
+                print(len(og_json))
+                print(len(json_data))
+                if len(og_json) == len(json_data):
+                    for i in range(len(og_json)):
+                        if og_json[i]["answer"] != json_data[i]["answer"] or og_json[i]["question"] != json_data[i]["question"]:
+                            edited = True
+                            break
+                else:
+                    edited = True
+                for card in userdeck.cards:
+                    models.db.session.delete(card)
+                for card in json_data:
+                    models.add_usercard(userdeck.id, card["answer"], card["question"])
                 models.db.session.commit()
-                return redirect(url_for("dashboard"))
             else:
                 deck_id = models.add_userdeck(current_user.id,session.video_id)
                 for card in json_data:
-                    models.add_usercard(deck_id, card["answer"], card["question"], 0, 0, 0)
-                return redirect(url_for("dashboard"))
+                    models.add_usercard(deck_id, card["answer"], card["question"])
+
+            #save analytics data
+            session.export_option = "save"
+            session.edited = edited
+            if edited: session.export_json = json_data 
+            models.db.session.commit()      
+            return redirect(url_for("dashboard"))
         else:
             abort(400)
     else:

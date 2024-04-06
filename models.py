@@ -9,13 +9,17 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(1000))
+    is_verified = db.Column(db.Boolean, nullable=True, unique=False)
+    creation_date = db.Column(db.DateTime, nullable=False, unique=False)
 
 #add new user
-def add_user(username, password, email):
+def add_user(username, password, email, is_verified = False, creation_date = datetime.now()):
     user = User(
         username=username,
         password=password,
-        email=email
+        email=email,
+        is_verified = is_verified,
+        creation_date = creation_date
     )
     db.session.add(user)
     db.session.commit()
@@ -34,9 +38,10 @@ class UserCard(db.Model):
     due_date = db.Column(db.DateTime, nullable=False, unique=False)
     dont_show = db.Column(db.Boolean, nullable=True, unique=False)
     last_practiced = db.Column(db.DateTime, nullable=False, unique=False)
+    total_repetitions = db.Column(db.Integer, nullable=False, unique=False)
 
 #add session entry 
-def add_usercard(deck_id, answer, question, easiness, interval, repetitions, due_date=datetime.now(), dont_show=False, last_practiced=datetime.now()):
+def add_usercard(deck_id, answer, question, easiness = 0, interval = 0, repetitions = 0, due_date=datetime.now(), dont_show=False, last_practiced=datetime.now(), total_repetitions = 0):
     user_card = UserCard(
         deck_id=deck_id,
         answer=answer,
@@ -46,7 +51,8 @@ def add_usercard(deck_id, answer, question, easiness, interval, repetitions, due
         repetitions=repetitions,
         due_date=due_date,
         dont_show = dont_show,
-        last_practiced = last_practiced
+        last_practiced = last_practiced,
+        total_repetitions = total_repetitions
     )
     db.session.add(user_card)
     db.session.commit()
@@ -76,13 +82,11 @@ class Video(db.Model):
     video_id = db.Column(db.String(200), primary_key=True)
     title = db.Column(db.String(200), nullable=True, unique=False)
     channel = db.Column(db.String(200), nullable=True, unique=False)
-    transcript = db.Column(db.Text, nullable=False, unique=False)
 
 #add session entry 
-def add_video(video_id, title, channel, transcript):
+def add_video(video_id, title, channel):
     video = Video(
         video_id = video_id,
-        transcript = transcript,
         title = title,
         channel = channel
     )
@@ -102,7 +106,7 @@ class Sessions(db.Model):
     difficulty = db.Column(db.Integer, nullable=False, unique=False)
     edited = db.Column(db.Boolean, nullable=True, unique=False)
     export_option = db.Column(db.String(30), nullable=True, unique=False)
-    export_json = db.Column(db.String(30), nullable=True, unique=False)
+    export_json = db.Column(db.JSON, nullable=True, unique=False)
 
 #add session entry 
 def add_session(video_id, json_data, amount, difficulty, time=datetime.now()):
