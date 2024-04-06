@@ -20,8 +20,8 @@
     <div class = "full-wrapper wave"></div> 
 {%- endmacro %}
 
-{% macro popup_window() -%}
-    <div x-cloak class = "popup window" x-data = "{open: false}" x-trap = "open" x-show = "open" x-transition.opacity.duration.100ms x-init="open=true">
+{% macro popup_window(fit_content=False) -%}
+    <div x-cloak class = "popup window {% if fit_content %} fit-content {% endif %}" x-data = "{open: false}" x-trap = "open" x-show = "open" x-transition.opacity.duration.100ms x-init="open=true">
         <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
         <div> {{ caller() }} </div>
     </div>

@@ -1,0 +1,6 @@
+{% import 'components.html' as components %}
+
+{% call components.popup_window(fit_content=True) %}
+    <h2> {{title}} </h2>
+    <p>{{message}}</p>
+{% endcall %}

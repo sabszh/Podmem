@@ -6,6 +6,9 @@ from auth.forms import SignupForm
 from flask_login import login_user, login_required, current_user, logout_user
 from app import limiter 
 from auth.decorators import logout_required
+from auth.token import generate_token, confirm_token
+from datetime import datetime
+from emails import send_email
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -15,7 +18,7 @@ def login():
     return render_template("auth/login.html")
 
 @auth_bp.route('/login', methods=['POST'])
-@limiter.limit("100/minute")
+@limiter.limit("10/minute")
 @logout_required
 def login_post():
     username = request.form.get('username').lower()
@@ -38,25 +41,77 @@ def signup():
     return render_template("auth/signup.html")
 
 @auth_bp.route('/signup', methods=['POST'])
-@limiter.limit("100/minute")
+@limiter.limit("30/minute")
 @logout_required
 def signup_post():
     form = SignupForm(request.form)
     validation = form.validate()
     if validation:
         username = form.username.data.lower()
-        if models.User.query.filter_by(email=form.email.data).first(): # if this returns a user, then the email already exists in database
+        email = form.email.data
+        if models.User.query.filter_by(email=email).first(): # if this returns a user, then the email already exists in database
             return 'Email address already exists'
 
         if models.User.query.filter_by(username=username).first(): # if this returns a user, then the username already exists in database
             return 'Username already exists'
 
+        token = generate_token(email)
+        veri_url = url_for('auth.verify_email', token = token, _external=True)
+        html = render_template("auth/verification_email.html", verification_url = veri_url, username = username)
+        try:
+            send_email(email, "Podmem Email Verification", html)
+        except:
+            return "Couldn't send email."
+        
         # add the new user to the database
-        models.add_user(email=form.email.data, username=form.username.data, password=generate_password_hash(form.password.data, method='scrypt'))
-        return '<script>location.reload();</script>'
+        user = models.add_user(email=form.email.data, username=form.username.data, password=generate_password_hash(form.password.data, method='scrypt'))
+        login_user(user)
+
+        return f'<script>window.location.href = "{url_for("auth.inactive")}", true;</script>'
     else:
         #return "Invalid input."
-        return [y[0] for x, y in form.errors.items()]
+        errors = [y[0] for x, y in form.errors.items()]
+        error_string = ""
+        for error in errors:
+            error_string = error_string + error + " "
+        return error_string
+
+@auth_bp.route('/verify/<token>')
+@login_required
+def verify_email(token):
+    if current_user.is_verified:
+        return render_template("message.html", message = "This account is already verified", submessage = "No sweat, you're already verified in our system!")
+    email = confirm_token(token)
+    user = models.User.query.filter_by(email=current_user.email).first_or_404()
+    if user.email == email:
+        user.is_verified = True
+        user.verification_date = datetime.now()
+        models.db.session.commit()
+        return render_template("message.html", message = "Success!", submessage = "Your account has been verified.")
+    else:
+        return render_template("message.html", message = "Verification failed.", submessage = "The link is invalid or has expired.")
+
+@auth_bp.route('/inactive')
+@login_required
+def inactive():
+    if current_user.is_verified:
+        return redirect(url_for('index'))
+    return render_template('auth/inactive.html')
+
+@auth_bp.route('/resend_verification')
+@limiter.limit("5/minute")
+@login_required
+def resend_verification():
+    if current_user.is_verified:
+        return f'<script>window.location.href = {url_for("index")}</script>' 
+    token = generate_token(current_user.email)  
+    veri_url = url_for('auth.verify_email', token = token, _external=True)
+    html = render_template("auth/verification_email.html", verification_url = veri_url)
+    try:
+        send_email(current_user.email, "Podmem Email Verification", html)
+    except:
+        return render_template("fragments/success.html", success = False)
+    return render_template("fragments/success.html", success = True)
 
 @auth_bp.route("/privacy_policy")
 def privacy_policy():

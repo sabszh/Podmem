@@ -809,6 +809,10 @@ header .dropdown .item {
     border-bottom-width: 3px !important; 
 }
 
+.popup.window.fit-content {
+    height: fit-content;
+}
+
 .popup.window.login {
     width: min(90%, 25rem);
     height: max-content;
@@ -1296,6 +1300,22 @@ select:hover {
 
 .ignore {
     display: contents; 
+}
+
+.fail {
+    margin-top: 2rem;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 900;
+    color:#FF6060;
+}
+
+.success {
+    margin-top: 2rem;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 900;
+    color:#19e884;
 }
 
 @keyframes rotation {

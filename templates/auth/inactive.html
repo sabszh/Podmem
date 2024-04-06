@@ -1,0 +1,16 @@
+{% import 'components.html' as components %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+    <div class = "full-wrapper purple padding-bot">
+        <div id = "video-titledata-wrapper" style = "justify-content: center;">
+            <h1 class = "big"> Verify your account </h1>
+            <span class = "small">We have sent you an email with a verification link. Make sure to check your spam folder.</span>
+            <a style = "display: flex; justify-self: center;" hx-get = "{{url_for('auth.resend_verification')}}" hx-target="this" hx-swap = "outerHTML" class = "button light-green"> Resend </a>
+        </div>
+    </div>  
+    {{components.wave()}}
+    
+{% endblock %}

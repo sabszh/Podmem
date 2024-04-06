@@ -11,18 +11,21 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(1000))
     is_verified = db.Column(db.Boolean, nullable=True, unique=False)
     creation_date = db.Column(db.DateTime, nullable=False, unique=False)
+    verification_date = db.Column(db.DateTime, nullable=True, unique=False)
 
 #add new user
-def add_user(username, password, email, is_verified = False, creation_date = datetime.now()):
+def add_user(username, password, email, is_verified = False, creation_date = datetime.now(), verification_date = None):
     user = User(
         username=username,
         password=password,
         email=email,
         is_verified = is_verified,
-        creation_date = creation_date
+        creation_date = creation_date,
+        verification_date = verification_date
     )
     db.session.add(user)
     db.session.commit()
+    return user
 
 class UserCard(db.Model):
     __tablename__ = "user_card"

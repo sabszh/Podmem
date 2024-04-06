@@ -6,6 +6,7 @@ load_dotenv() #requires .env file
 OPENAI_KEY = os.getenv('OPEN_AI_API_KEY')
 YOUTUBE_KEY = os.getenv('YT_API_KEY')
 SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_SECURITY_SALT = os.getenv('SECRET_SECURITY_SALT')
 
 DB_NAME = "analytics"
 USER = os.getenv("DB_USER")
@@ -20,6 +21,7 @@ class FlaskConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TRAP_HTTP_EXCEPTIONS = True
     SECRET_KEY = SECRET_KEY
+    SECURITY_PASSWORD_SALT = SECRET_SECURITY_SALT
     MAIL_DEFAULT_SENDER = "postmaster@podmem.com"
     MAIL_SERVER = "smtp.eu.mailgun.org"
     MAIL_PORT = 587

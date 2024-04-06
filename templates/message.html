@@ -1,0 +1,15 @@
+{% import 'components.html' as components %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+    {{ super() }}
+    <div class = "full-wrapper purple padding-bot">
+        <div id = "video-titledata-wrapper">
+            <h1 class = "big"> {{message}} </h1>
+            <span class = "small">{{submessage}}</span>
+        </div>
+    </div>  
+    {{components.wave()}}
+    
+{% endblock %}

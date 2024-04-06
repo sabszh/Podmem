@@ -1,4 +1,4 @@
-from app import app
+from app import app, limiter
 from flask import render_template, request, jsonify, json, abort, redirect, flash, url_for
 from markupsafe import escape
 import flashcard
@@ -8,6 +8,7 @@ import models
 import datetime
 from flask_login import current_user, login_required
 from supermemo2 import SMTwo
+from auth.decorators import is_verified
 
 TOKENS_PER_CHUNK = 3900
 CARDS_PER_CHUNK = 4
@@ -18,6 +19,7 @@ def index():
     return render_template('index.html', header_color = "purple")
 
 @app.route("/flashcards", methods =["GET", "POST"])
+@limiter.limit("5/minute")
 def flashcards():
     if request.method == "POST":
         video_url = request.form.get("video-url")
@@ -65,6 +67,7 @@ def flashcards():
 
 @app.route("/dashboard")
 @login_required
+@is_verified
 def dashboard():
     # check for decks corresponding to user id 
     decks = models.UserDeck.query.filter_by(user_id=current_user.id).all()
@@ -76,6 +79,7 @@ def dashboard():
 
 @app.route("/save_deck/<session_id>", methods=['GET', 'POST'])
 @login_required
+@is_verified
 def save_deck(session_id):
     session = models.Sessions.query.filter_by(id = session_id).first()
     if session:
@@ -110,7 +114,6 @@ def save_deck(session_id):
                 deck_id = models.add_userdeck(current_user.id,session.video_id)
                 for card in json_data:
                     models.add_usercard(deck_id, card["answer"], card["question"])
-
             #save analytics data
             session.export_option = "save"
             session.edited = edited
@@ -160,6 +163,7 @@ def study_deck(id):
     return render_template("study.html", deck_id = id, header_color = "purple")
 
 @app.route("/study")
+@is_verified
 @login_required
 def study_all():
     starting_card = models.UserCard.query.join(models.UserCard.deck).filter(models.UserDeck.user_id == current_user.id, models.UserCard.due_date <= datetime.datetime.now()).first()
@@ -188,6 +192,7 @@ def review_and_serve_next_card(rating, card_id):
             card.easiness = review.easiness
             card.interval = review.interval
             card.due_date = review.review_date
+            card.total_repetitions += 1
             models.db.session.commit()
         else:
             review = SMTwo(card.easiness, card.interval, card.repetitions).review(rating, datetime.datetime.now())
@@ -195,6 +200,7 @@ def review_and_serve_next_card(rating, card_id):
             card.easiness = review.easiness
             card.interval = review.interval 
             card.due_date = review.review_date
+            card.total_repetitions += 1
             models.db.session.commit()
 
     new_card = models.UserCard.query.join(models.UserCard.deck).filter(models.UserDeck.user_id == current_user.id, models.UserCard.due_date <= datetime.datetime.now()).first()
@@ -210,23 +216,16 @@ def review_and_serve_next_card(rating, card_id):
 @app.route("/review_deck/<deck_id>/<index>")
 @login_required
 def review_card_in_deck(deck_id, index):
-
     deck_id = int(deck_id)
     index = int(index)
-
     deck = models.UserDeck.query.filter_by(user_id = current_user.id, id = deck_id).first()
-
     if not deck:
         return render_template("fragments/alert.html", message = "You don't have access to this deck.")
-
     cards = deck.cards
-
     if index + 1 < len(deck.cards):
         new_index = index + 1
     else:
         new_index = 0
-
-
     return render_template("fragments/study_card.html", card = cards[index], new_index = new_index, deck_id = deck_id)
 
 @app.route("/view_card/<id>")
@@ -288,3 +287,7 @@ def page_not_found(e):
 @app.errorhandler(400)
 def page_not_found(e):
     return render_template('errors/400.html'), 400
+
+@app.errorhandler(429)
+def ratelimit_handler(e):
+    return render_template('errors/429'), 429
