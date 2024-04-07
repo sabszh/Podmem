@@ -17,10 +17,15 @@ MAIL_PASS = os.getenv("MAIL_PASS")
 MAIL_USER = os.getenv("MAIL_USER")
 MAIL_SERVER = os.getenv("MAIL_SERVER")
 
+if os.getenv("DEBUG") == "True":
+    DEBUG = True
+else:
+    DEBUG = False
+
 class FlaskConfig: 
     ENVIRONMENT = ENVIRONMENT
     FLASK_APP = "Podmem"
-    FLASK_DEBUG = False   
+    FLASK_DEBUG = DEBUG
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USER}:{PIN}@{HOST}/{DB_NAME}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TRAP_HTTP_EXCEPTIONS = True

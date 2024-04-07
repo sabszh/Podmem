@@ -18,16 +18,16 @@
 
 <div id = "nav-wrapper" class = "study">
     <div x-data>
-        <button class = "light-green" @click = "showAnswer = true; showEval = true" x-show = "!showEval"> Reveal </button>
+        <button class = "light-green" @click = "showAnswer = true; showEval = ''" x-show = "showEval === 'hidden'"> Reveal </button>
     </div>
-    <div x-data x-show = "showEval">
+    <div x-data :class = "showEval">
         <p class = "small">How well did you know the answer?</p> <br> 
         <div class = "rating-buttons">
             {% for rating_btn in [0,1,2,3,4,5] %}
                 {% if deck_id is defined %}
-                <a hx-get="/review_deck/{{deck_id}}/{{new_index}}" hx-target=".main-wrapper" class = "button eval-rating" @click="showEval=false; showAnswer=false;">{{rating_btn}}</a>
+                <a hx-get="/review_deck/{{deck_id}}/{{new_index}}" hx-target=".main-wrapper" class = "button eval-rating" @click="showEval='hidden'; showAnswer=false;">{{rating_btn}}</a>
                 {% else %}
-                <a hx-get="/review/{{rating_btn}}/{{card.id}}" hx-target=".main-wrapper" class = "button eval-rating" @click="showEval=false; showAnswer=false;">{{rating_btn}}</a>
+                <a hx-get="/review/{{rating_btn}}/{{card.id}}" hx-target=".main-wrapper" class = "button eval-rating" @click="showEval='hidden'; showAnswer=false;">{{rating_btn}}</a>
                 {% endif %}
             {% endfor %}
         </div>

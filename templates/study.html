@@ -16,11 +16,11 @@
   {{ components.wave() }}
 
   {% if deck_id is defined %}
-  <div hx-get = "/review_deck/{{deck_id}}/0" hx-trigger="load" class = "main-wrapper negative-margin" x-data="{showAnswer: false, showEval: false}">
+  <div hx-get = "/review_deck/{{deck_id}}/0" hx-trigger="load" class = "main-wrapper negative-margin fill-viewport-height" x-data="{showAnswer: false, showEval: 'hidden'}">
     {{ components.loading_indicator() }}
   </div>
   {% else %}
-  <div hx-get = "/review/-1/{{starting_card_id}}" hx-trigger="load" class = "main-wrapper negative-margin" x-data="{showAnswer: false, showEval: false}">
+  <div hx-get = "/review/-1/{{starting_card_id}}" hx-trigger="load" class = "main-wrapper negative-margin fill-viewport-height" x-data="{showAnswer: false, showEval: 'hidden'}">
     {{ components.loading_indicator() }}
   </div>
   {% endif %}

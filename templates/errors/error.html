@@ -1,0 +1,14 @@
+{% import 'components.html' as components %}
+{% extends 'base.html' %}
+
+{% block body %}
+
+{{ super() }}
+{{components.wave()}}
+
+<div id = "hero-wrapper" class = "fill-viewport-height">
+    <h1 class = "big black"><span class = "red">{{error_code}}</span> – {{error_title}}</h1>
+    <span class = "small black">{{error_message}}</span>
+</div>  
+
+{% endblock %}

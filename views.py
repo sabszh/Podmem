@@ -278,16 +278,16 @@ def get_notification(type):
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('errors/500.html'), 500
+    return render_template('errors/error.html', error_code = "500", error_title = "server error", error_message = "Sorry, something went wrong."), 500
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('errors/404.html'), 404
+    return render_template('errors/error.html', error_code = "404", error_title = "page not found", error_message = "Sorry, the page you were trying to access doesn't exist."), 404
 
 @app.errorhandler(400)
 def page_not_found(e):
-    return render_template('errors/400.html'), 400
+    return render_template('errors/error.html', error_code = "400", error_title = "bad request", error_message = "Sorry, we couldn't handle your request."), 400
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
-    return render_template('errors/429'), 429
+    return render_template('errors/error.html', error_code = "429", error_title = "too many requests", error_message = "Sorry, you have submitted too many requests. Wait a few minutes, and try again."), 429
