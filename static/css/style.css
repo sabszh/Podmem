@@ -1434,6 +1434,11 @@ select:hover {
     width: 100%;
     background-repeat: no-repeat;
     background-size: 100vw auto;
+    margin-top: -1px;
+}
+
+.wave_flipped {
+    margin-bottom: -1px;
 }
 
 .no-margin {
@@ -1721,4 +1726,10 @@ select:hover {
     header .logo {
         display: none;
     }
+    .donate div img {
+        width: 90%;
+        margin: 0 auto;
+        margin-bottom: 2rem;
+    }
+
 }
