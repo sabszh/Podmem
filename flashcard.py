@@ -1,14 +1,13 @@
+import config
 import transcript
 from openai import OpenAI
 import tiktoken
-import config
 
-API_KEY = config.OPENAI_KEY
 SYSTEM_PROMPT = "You are a flashcard generator. You generate questions and answers that are key to understanding the transcripts given to you."
 TEMPERATURE = 0
 MODEL = "gpt-3.5-turbo"
 
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=config.OPENAI_KEY)
 encoding = tiktoken.encoding_for_model(MODEL)
 
 class Flashcard:
