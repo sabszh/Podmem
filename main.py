@@ -4,6 +4,7 @@ from views import *
 from models import *
 import config
 import pymysql
+from socket import gethostname
 
 #auth init
 app.register_blueprint(auth_bp)
@@ -51,4 +52,5 @@ def create_tables():
 
 if __name__ == '__main__':
     create_tables()
-    app.run()
+    if 'liveconsole' not in gethostname():
+        app.run()
