@@ -1430,7 +1430,7 @@ select:hover {
 }
 
 .wave {
-    height: 6vw;
+    height: 8rem;
     width: 100%;
     background-repeat: no-repeat;
     background-size: 100vw auto;

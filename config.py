@@ -8,7 +8,7 @@ YOUTUBE_KEY = os.getenv('YT_API_KEY')
 SECRET_KEY = os.getenv('SECRET_KEY')
 SECRET_SECURITY_SALT = os.getenv('SECRET_SECURITY_SALT')
 
-DB_NAME = "analytics"
+DB_NAME = os.getenv("DB_NAME")
 USER = os.getenv("DB_USER")
 PIN = os.getenv("DB_PASSWORD")
 HOST = os.getenv("DB_HOSTNAME")
