@@ -16,7 +16,7 @@
 {%- endmacro %}
 
 {% macro wave() -%}
-    <style> .wave {background-image: url("{{ url_for('static', filename='images/wave.svg')}}"); height: 5rem;} </style>
+    <style> .wave {background-image: url("{{ url_for('static', filename= 'images/wave.svg')}}");} </style>
     <div class = "full-wrapper wave"></div> 
 {%- endmacro %}
 

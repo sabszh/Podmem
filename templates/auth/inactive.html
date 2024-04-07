@@ -7,10 +7,17 @@
     <div class = "full-wrapper purple padding-bot">
         <div id = "video-titledata-wrapper" style = "justify-content: center;">
             <h1 class = "big"> Verify your account </h1>
-            <span class = "small">We have sent you an email with a verification link. Make sure to check your spam folder.</span>
+            <span class = "small">We have sent you an email with a verification link. It might take a few minutes. Make sure to check your spam folder.</span>
             <a style = "display: flex; justify-self: center;" hx-get = "{{url_for('auth.resend_verification')}}" hx-target="this" hx-swap = "outerHTML" class = "button light-green"> Resend </a>
         </div>
     </div>  
+
     {{components.wave()}}
+
+    <div class = 'grid-main'>
+        <img style = "justify-self: center; width: 20vh;" src = "{{ url_for('static', filename='images/brain_alert.svg') }}" alt = "Brain Alert">
+        <h2 style = "text-align: center; font-size: 2rem; margin-bottom: 1rem;" class = "red"> {{ message }}</h2>
+        <span class = "small" style = "font-size: 1rem;"> {{ sub_message }} </span>
+    </div>
     
 {% endblock %}

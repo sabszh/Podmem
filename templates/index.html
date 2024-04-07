@@ -8,9 +8,9 @@
 <div class = "full-wrapper purple" classes = "add light-green">
   <div id = "hero-wrapper" x-data = "{show: false} ">
     <h1 class = "big fade-load" classes="remove fade-load:0s" hx-ext="class-tools">
-      <img src = "{{ url_for('static', filename='images/star1.svg') }}" alt = "star" class = "decoration fade-load" classes="remove fade-load:0.5s hx-ext="class-tools" classes = "toggle faded:3s" style = "position: absolute; margin-left: -7.5rem; margin-top: 10rem;">
+      <img src = "{{ url_for('static', filename='images/star1.svg') }}" alt = "star" class = "decoration fade-load" classes="remove fade-load:0.5s" hx-ext="class-tools" classes = "toggle faded:3s" style = "position: absolute; margin-left: -7.5rem; margin-top: 10rem;">
       Flashcards from <span class = "loud fade-load" classes="remove fade-load:0s">YouTube</span>
-      <img src = "{{ url_for('static', filename='images/star1.svg') }}" alt = "star" class = "decoration fade-load" classes="remove fade-load:0.3s hx-ext="class-tools" classes = "toggle faded:5s" style = "position: absolute; margin-left: 5rem; margin-top: -2rem; rotate: 20deg;">
+      <img src = "{{ url_for('static', filename='images/star1.svg') }}" alt = "star" class = "decoration fade-load" classes="remove fade-load:0.3s" hx-ext="class-tools" classes = "toggle faded:5s" style = "position: absolute; margin-left: 5rem; margin-top: -2rem; rotate: 20deg;">
     </h1>
     <span class = "small fade-load" hx-ext = "class-tools" classes="remove fade-load:0.2s">Generate high quality flashcards from videos. <br> Easily edit, study or export – <b>100%</b> free.</span>
   </div>  
@@ -78,17 +78,38 @@
 </div>
 {{components.wave()}}
 
-<div id = "image-text-split" class = "grid-main no-margin">
+<section id = "image-text-split" class = "grid-main no-margin info-section">
   <div>
     <h2> Don't let good knowledge <br> <span class ="loud">go to waste</span></h2>
     <p> <b>Millions of hours</b> of educational content is consumed on YouTube daily. But how much of it is retained long term? We created this free tool to help remember the valuable things we learn by watching videos.</p>
-    <a href = "" hx-get = "{{url_for('auth.signup')}}" hx-swap = "beforeend" hx-target = "body" class = "button light-green"> Get started </a>
+    <a href = "" hx-get = "{{url_for('auth.signup')}}" hx-swap = "beforeend" hx-target = "body" class = "button light-green"> Get started </a> <img src = "{{ url_for('static', filename='images/flash_star.svg') }}" alt = "Flash" class = "flash_star" style = "margin-left: -25rem;">
   </div>
-  <img src = "{{ url_for('static', filename='images/globe.svg') }}">
-</div>
+  <img src = "{{ url_for('static', filename='images/globe.svg') }}" alt = "Circle with flashcards inside">
+</section>
+
+<section id = "research-section" class = "info-section colored grid-main ">
+  <div>
+    <div class = "top-snippet">
+      <img style = "position: relative; top: 1.5rem; margin-right: 1rem; width: 4rem;" src = "{{ url_for('static', filename='images/brain.svg') }}" alt = "Purple Brain">
+      <span class = "title-snippet"> Research </span>
+    </div>
+    <h2 x-data = "{classes: ''}" x-intersect.once.margin.-40% = "classes = 'dot'"> Research shows you have to <br> <span class ="loud" >space<span :class = "classes">.</span> it<span :class = "classes">.</span> out<span :class = "classes">.</span></span></h2>
+  </div>
+  <div>
+    <p> <b>Research</b> in cognitive psychology shows that spacing out rehearsal improves retrieval significantly. In fact, it is more effective than cramming – that is, massing study on the last day before a test.</p>
+    <div>
+      <img src = "{{ url_for('static', filename='images/papers.svg') }}" alt = "Papers icon">
+      <a href = "https://onlinelibrary.wiley.com/doi/abs/10.1002/acp.1537" target="_blank" class = "button light-green"> Kornell, 2009 </a>
+    </div>
+  </div>
+</section>
 
 <div class = "donate">
-  <p class = "small">Want to help keep this service free?</p>
+  <div>
+    <img src = "{{ url_for('static', filename='images/avatar.svg') }}" alt = "Papers icon">
+    <img src = "{{ url_for('static', filename='images/avatar.svg') }}" alt = "Papers icon">
+  </div>
+  <p><b>We’re two Cognitive Science students</b> from Aarhus University passionate about leveraging AI to enrich everyday experiences. Our goal is to advance Podmem as a learning tool, drawing upon our expertise in experimental sciences and cognitive studies. </p>
   <a class = "button light-green" href = "flashcards">Donate a Coffee <img src = "{{ url_for('static', filename='images/coffee.svg') }}" alt = "Coffee Icon"></a>
 </div>
     

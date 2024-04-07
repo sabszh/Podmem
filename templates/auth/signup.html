@@ -1,3 +1,5 @@
+{% import 'components.html' as components %}
+
 <div x-cloak class = "popup window login signup" x-data = "{open: false}" x-trap = "open" x-show = "open" x-transition.opacity.duration.100ms x-init="open=true">
     <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
     <div id = "login-wrapper">
@@ -15,9 +17,8 @@
             <input type = "email" name = "email" placeholder = "Enter email"> <br>
             <span class = "terms"> <input type = "checkbox" name = "terms"> Agree to <a href = "" hx-get="{{url_for('auth.terms')}}" hx-target="body" hx-swap="beforeend" style = "margin: 0;">Terms</a> and <a href = "" hx-get="{{url_for('auth.privacy_policy')}}" hx-target="body" hx-swap="beforeend">Privacy Policy</a> </span>
             <button class = "light-green"> Register</button>
-
-            <span class="red alert">
-            </span>
+            <span class="red alert"></span>
+            <div class = "loading-container"> {{ components.loading_indicator() }} </div>    
         </form>
         {% endif %}
     </div> 

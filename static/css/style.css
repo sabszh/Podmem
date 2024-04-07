@@ -1,5 +1,9 @@
 [x-cloak] { display: none; }
 
+html {
+    min-height: 100%;
+}
+
 :root {
     font-size: 18px;
     font-family: "Mulish";
@@ -10,8 +14,8 @@ body {
     overflow-x: hidden;
     background: #F4F7FD;
     margin: 0;
-    padding-bottom: 5rem;
     width: 100%; 
+    min-height: 100vh;
     display: grid;
     justify-content: center;
     grid-auto-rows: min-content;
@@ -28,8 +32,6 @@ body {
     grid-template-rows: auto 1fr;  
     justify-content: center;
 }
-
-
 
 .full-wrapper {
     display: inherit;
@@ -49,25 +51,45 @@ body {
 }
 
 footer {
+    width: 100%;
+    background:#7154E5;
+    justify-content: center;
+    padding-top: 2rem;
+    color: white;
+}
+
+footer >div {
     display: inherit;
-    grid-column: main;
+    grid-column: full;
     height: 100%;
-    grid-auto-flow: column;
-    grid-template-rows: 1fr; 
-    margin-top: 4rem;
 }
 
-footer >*{
-    display: flex;
-    align-self: center; 
+footer >div img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    width: 9rem; 
 }
 
-footer span {
-    align-self: flex-end;
-    justify-self: center;
-    height: min-content;
-    margin-bottom: 2rem;
-    font-weight: 200; 
+footer >div div {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+footer >div div span a {
+    margin: 0 2rem;
+    font-weight: 200;
+}
+
+footer >div div span a:visited, footer>div div span a:active {
+    color: white;
+}
+
+footer >div >span {
+    padding: 1rem 0;
+    text-align: center;
+    background:#14C5A8;
+    color: black;
 }
 
 header {
@@ -197,6 +219,23 @@ header .dropdown .item {
     box-sizing: border-box;
 }
 
+#login-wrapper .loading-container {
+    margin: 0;
+    height: fit-content;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#login-wrapper .loading-container .grid-main {
+    height: 0;
+}
+
+#login-wrapper .loading-container img {
+    margin-top: 2rem;
+    width: 2rem;
+}
+
 #login-wrapper .alert {
     margin-top: 1.5rem;
     font-weight: 800;
@@ -276,11 +315,129 @@ header .dropdown .item {
     transition: opacity 1s; 
 }
 
-#image-text-split {
+.info-section {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr; 
     box-sizing: border-box;
+    margin-top: 8rem;    
 }
+
+.info-section h2 {
+    font-size: 1.5rem;
+    font-size: min(3vw, 1.5rem);
+    font-weight: 300;
+    line-height: 2.8rem;
+    line-height: min(5vw, 2.8rem);
+}
+
+.info-section p {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.7rem;
+}
+
+.info-section h2 .loud {
+    font-size: 4rem;
+    font-size: min(6.5vw, 4rem);
+    font-weight: 900; 
+}
+
+.info-section.colored {
+    border-radius: 2rem;
+    padding: 3rem 2rem 2rem 2rem;
+}
+
+.info-section .top-snippet {
+    position: absolute;
+    top: -3rem;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+#research-section {
+    align-self: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    padding-left: max(5%, 2rem);
+    padding-right: max(5%, 2rem);
+    position: relative;
+    margin-top: 10rem;
+    color: white;
+    box-shadow: 8px 8px 0px 0px black; 
+    background:#7154E5;
+}
+
+#research-section .dot:nth-child(1) {
+    transition: 1.5s;
+}
+
+#research-section .dot:nth-child(2) {
+    transition: 2s;
+}
+
+#research-section .dot:nth-child(3) {
+    transition: 3s;
+}
+
+#research-section .dot {
+    transition: 2s;
+    margin-right: clamp(1rem, 10%, 4rem);
+}
+
+#research-section .dot:nth-child(1){
+    color:#afff60;
+}
+
+#research-section .dot:nth-child(2){
+    color:#FF6060;
+}
+
+#research-section .dot:nth-child(3){
+    color:#C260FF;
+}
+
+#research-section h2 .loud {
+    font-size: clamp(4rem, 7vw, 5.5rem);
+    line-height: clamp(4rem, 7.2vw, 5rem);
+}
+
+#research-section div:last-child {
+    display: flex;
+    box-sizing: border-box;
+}
+
+#research-section div:last-child p {
+    margin-top: 4rem;
+    width: 57%;
+    padding-right: 4.5rem;
+    font-size: 1.3rem;
+    line-height: 2rem;
+    font-weight: 200;
+}
+
+#research-section div:last-child div {
+    width: 43%;
+    display: block;
+    z-index: 0;
+    margin-bottom: 2rem;
+}
+
+#research-section div:last-child div img {
+    position: relative;
+    width: 100%;
+    z-index: -1;
+}
+
+#research-section .button {
+    border: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -4rem;
+    z-index: 99;
+    box-shadow: 4px 4px; 
+}
+
 
 #image-text-split div {
     justify-self: left;
@@ -294,26 +451,6 @@ header .dropdown .item {
     justify-self: right;
     align-self: center;
     width: 80%;
-}
-
-#image-text-split p {
-    font-size: 1.1rem;
-    font-weight: 300;
-    line-height: 1.7rem;
-}
-
-#image-text-split h2 {
-    font-size: 1.5rem;
-    font-size: min(3vw, 1.5rem);
-    font-weight: 300;
-    line-height: 2.8rem;
-    line-height: min(5vw, 2.8rem);
-}
-
-#image-text-split h2 .loud {
-    font-size: 4rem;
-    font-size: min(6.5vw, 4rem);
-    font-weight: 900; 
 }
 
 #image-text-split a.button {
@@ -813,6 +950,10 @@ header .dropdown .item {
     height: fit-content;
 }
 
+.popup.window.fit-content >div {
+    height: fit-content;
+}
+
 .popup.window.login {
     width: min(90%, 25rem);
     height: max-content;
@@ -820,15 +961,16 @@ header .dropdown .item {
     padding: 2.5rem 2rem 2rem 2rem;
 }
 
-.popup.window >div {
-    width: 100%;
+.popup.window.login >div {
     height: fit-content;
-    overflow-y: scroll;
-    position: static;
+    overflow-y: unset;
 }
 
-.popup.window.login >div{
-    overflow-y: unset;
+.popup.window >div {
+    width: 100%;
+    overflow-y: scroll;
+    position: static;
+    height: 100%;
 }
 
 .popup.window .x {
@@ -1167,21 +1309,40 @@ select:hover {
 
 .donate {
     grid-column: main;
-    margin-top: 6rem;
+    margin-top: 10rem;
     justify-content: center;
     text-align: center;
     display: inherit;
 }
 
-.donate .small {
-    margin-bottom: 3rem;
+.donate p {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    font-size: 1.2rem;
+    margin-bottom: 5rem;
+    font-weight: 200;
+    line-height: 1.7rem;
 }
 
 .donate .button {
     justify-self: center;
+    border: none;
+    box-shadow: 6px 6px;
+    padding-left: 4.5rem;
+    padding-right: 4.5rem;
+    rotate: 1deg;
+    font-weight: 900;
 }
 
-.donate img {
+.donate div img {
+    width: 12rem;
+    margin-bottom: 3rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+.donate .button img {
     position: relative;
     bottom: 2px;
     filter: invert(100%);
@@ -1265,12 +1426,14 @@ select:hover {
 }
 
 .negative-margin {
-    margin-top: -6rem !important;
+    margin-top: -9rem !important;
 }
 
 .wave {
+    height: 6vw;
+    width: 100%;
     background-repeat: no-repeat;
-    background-size:100vw;
+    background-size: 100vw auto;
 }
 
 .no-margin {
@@ -1316,6 +1479,22 @@ select:hover {
     text-align: center;
     font-weight: 900;
     color:#19e884;
+}
+
+.flash_star {
+    position: absolute;
+    z-index: -1;
+    animation: rotation 15s infinite linear;
+}
+
+.title-snippet {
+    padding: 0.8rem 1.2rem;
+    border-radius: 1.5rem;
+    background: white;
+    color: black;
+    font-size: 1.5rem;
+    box-shadow: 3px 2px 0px 0px black;  
+    font-weight: 200;
 }
 
 @keyframes rotation {
@@ -1380,6 +1559,37 @@ select:hover {
         justify-content: left;
     }
 
+    #research-section div:last-child {
+        display: block;
+        width: 100%;
+    }
+
+    #research-section div:last-child p {
+        margin-top: 2rem;
+        padding: 0;
+        width: 100%; 
+    }
+
+    #research-section div:last-child div img {
+        z-index: 1;
+        width: max(15rem, 50%);
+        margin: 2rem auto;
+        display: block;
+    }
+    #research-section div:last-child div {
+        width: 100%;
+    }
+    #research-section div:last-child .button {
+        margin-top: 0rem;
+        width: max(12rem, 65%);
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .donate p {
+        width: 85%;
+    }
+
 }
 
 @media screen and (max-width: 600px) {
@@ -1404,15 +1614,15 @@ select:hover {
         padding-right: 0;
     }
 
-    #image-text-split {
+    .info-section{
         grid-template-columns: 1fr;
     }
 
-    #image-text-split h2 .loud {
+    .info-section h2 .loud {
         font-size: 3.5rem;
     }
 
-    #image-text-split h2 {
+    .info-section h2 {
         line-height: 2.5rem;
         font-size: 1.5rem;
     }
@@ -1447,6 +1657,32 @@ select:hover {
 
     .table >.item .button {
         font-size: 0.8rem;
+    }
+
+    .info-section .top-snippet {
+        width: 80%;
+    }
+
+    .flash_star {
+        display: none;
+    }
+
+    footer {
+        margin-top: 6rem;
+    }
+
+    footer >div div span {
+        margin-top: 1rem;
+        display: block;
+        width: 100%;
+    }
+
+    .wave {
+        height: 3rem;
+    }
+
+    .wave_flipped {
+        display: none;
     }
 
 }
