@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Outfit';
+    src: url(/static/fonts/Outfit-VariableFont_wght.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'Mulish';
+    src: url(/static/fonts/Mulish-VariableFont_wght.ttf) format('truetype');
+}
+
 [x-cloak] { display: none; }
 
 html {
@@ -459,6 +469,8 @@ header .dropdown .item {
     text-align: center;
     font-weight: 900; 
     rotate: 1deg;
+    border: none;
+    box-shadow: 6px 6px;
 }
 
 #video-titledata-wrapper {
@@ -993,7 +1005,7 @@ header .dropdown .item {
 }
 
 .popup a {
-    color: white;
+    color: black;
     font-weight: 800;
 }
 
@@ -1213,7 +1225,7 @@ input[type=text], input[type=password], input[type=email] {
     width: 100%;
     padding-left: 4.3rem;
     height: 3.11rem;
-    font-family: "Raleway";
+    font-family: "Mulish";
     font-size: 1.2rem;
     font-weight: 200;
     color: black;
@@ -1628,6 +1640,10 @@ select:hover {
         padding-right: 0;
     }
 
+    .settings-icon {
+       margin-top: 1.2rem;
+    }
+
     .info-section{
         grid-template-columns: 1fr;
     }
@@ -1641,15 +1657,14 @@ select:hover {
         font-size: 1.5rem;
     }
 
-    #image-text-split .button {
-        margin-left: auto;
-        margin-right: auto;
+    #image-text-split a.button {
+        margin: 0 auto;
+        display: block;
+        margin-top: 4rem;
     }
 
     #image-text-split img {
-        padding: 0;
-        margin-top: 6rem;
-        justify-self: center;
+        display: none;
     }
 
     #flashcard-wrapper {
