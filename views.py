@@ -19,7 +19,6 @@ def index():
     return render_template('index.html', header_color = "purple")
 
 @app.route("/flashcards", methods =["GET", "POST"])
-@limiter.limit("5/minute")
 def flashcards():
     if request.method == "POST":
         video_url = request.form.get("video-url")
