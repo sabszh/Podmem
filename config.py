@@ -36,3 +36,4 @@ class FlaskConfig:
     MAIL_PORT = 587
     MAIL_USERNAME = MAIL_USER
     MAIL_PASSWORD = MAIL_PASS
+    SQLALCHEMY_ENGINE_OPTIONS = {'pool_recycle' : 280}
