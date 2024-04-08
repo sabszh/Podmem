@@ -46,7 +46,8 @@ def flashcards():
                 #transcribe video
                 try:
                     video_transcript = transcript.get_transcript(video_id)
-                except: 
+                except Exception as error: 
+                    print("400 Error:", error)
                     abort(400)
                 #get video info from data api
                 try:
