@@ -25,7 +25,6 @@ def add_user(username, password, email, is_verified = False, creation_date = dat
     )
     db.session.add(user)
     db.session.commit()
-    db.session.close()
     return user
 
 class UserCard(db.Model):
@@ -60,7 +59,6 @@ def add_usercard(deck_id, answer, question, easiness = 0, interval = 0, repetiti
     )
     db.session.add(user_card)
     db.session.commit()
-    db.session.close()
     return user_card.id
 
 class UserDeck(db.Model):
@@ -78,7 +76,6 @@ def add_userdeck(user_id, video_id, creation_date=datetime.now()):
     deck = UserDeck(user_id=user_id, video_id=video_id, creation_date=creation_date)
     db.session.add(deck)
     db.session.commit()
-    db.session.close()
     return deck.id
 
 # Sessions table
@@ -99,7 +96,6 @@ def add_video(video_id, title, channel):
 
     db.session.add(video)
     db.session.commit()
-    db.session.close()
 
 # Sessions table
 class Sessions(db.Model):
@@ -127,5 +123,5 @@ def add_session(video_id, json_data, amount, difficulty, time=datetime.now()):
 
     db.session.add(session)
     db.session.commit()
-    db.session.close()
     return session.id
+
