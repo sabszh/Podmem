@@ -51,7 +51,8 @@ def flashcards():
                 #get video info from data api
                 try:
                     video_info = transcript.get_video_info(video_id)
-                except: 
+                except Exception as error: 
+                    print("400 Error:", error)
                     abort(400)
                 flashcards = flashcard.generate_flashcards(flashcard.split_text(video_transcript, TOKENS_PER_CHUNK), CARDS_PER_CHUNK * amount, difficulty=diff)
                 #create dictionary with all flash cards and convert to json
