@@ -48,5 +48,9 @@ def get_transcript(id):
     return txt_transcript
 
 if __name__ == "__main__":
-    print(get_transcript("DrXvsfLVWeE"))
+    try:
+        video_transcript = get_transcript("DrXvsfLVWeE")
+        print(video_transcript)
+    except Exception as error: 
+        print("400 Error:", error)
 
