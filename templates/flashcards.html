@@ -75,8 +75,7 @@
           });        
           '>Save</button>
           {% else %}
-          <button class = "nonclickable" x-ref = "save" style = "opacity: 0.2" @mouseover = "showTooltip=true;" @mouseleave= "showTooltip=false"> Log in to save </button>
-          <div class = "tooltip" x-anchor="$refs.save" x-transition x-show = "showTooltip"> Save to account </div>
+          <button class = "nonclickable" x-ref = "save" style = "opacity: 0.5" @mouseover = "showTooltip=true;" @mouseleave= "showTooltip=false"> Log in to save </button>
           {% endif %}
         </div>
       </div>  
