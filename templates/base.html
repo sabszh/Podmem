@@ -28,7 +28,7 @@
             <header>
                 <div class = "header-wrapper">
                     <a href = "{{url_for('index')}}" class = "logo icon" ><img src = "{{ url_for('static', filename='images/logo_icon.svg') }}" alt = "Podmem Logo"></a>
-                    <a href = "{{url_for('index')}}" class = "logo" ><img src = "{{ url_for('static', filename='images/logo1.svg') }}" alt = "Podmem Logo"></a>
+                    <a href = "{{url_for('index')}}" class = "logo" ><img src = "{{ url_for('static', filename='images/logo2.svg') }}" alt = "Podmem Logo"></a>
 
                     <div class = "login">
                         {% if current_user.is_authenticated %}
@@ -66,5 +66,8 @@
                 </span>
             </div>
         </footer>  
+        <!-- 100% privacy-first analytics -->
+        <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+        <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
     </body>
 </html>
