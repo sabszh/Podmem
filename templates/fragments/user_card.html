@@ -2,10 +2,6 @@
     <textarea x-data="{ resize: () => { $el.style.height = '5px'; $el.style.height = $el.scrollHeight + 'px' } }" @resize.window = "setTimeout(() => resize(), 50)" placeholder = "Write your {{name}}"  @input = "resize()" name = "{{name}}" x-effect = "{{name}}" x-text = "{{name}}"></textarea>
 {%- endmacro %}
 
-{% if new is defined %}
-
-{% endif %}
-
 <div class = "flashcard single edit" hx-target = "this">
     <div x-data = "{edit: false, question: '', answer: ''}" {% if new is defined %} x-init = "edit=true" {% endif %}> 
         <form class = "ignore" method="post" name = "edit_card">
@@ -27,7 +23,7 @@
             {% else %}
                 <button type = "button" x-data class = "light-green" @click = "edit=true; $dispatch('resize');" x-show = "!edit"> Edit </button>
                 <button type = "button" class = "light-green" @click = "edit=false" x-show = "edit" hx-swap = "outerHTML" hx-post = "{{url_for('update_card', id = card.id)}}"> Submit </button>
-                <button type = "button" class = "black" hx-swap = "outerHTML" hx-delete = "{{url_for('delete_card', id = card.id)}}"> Delete </button>
+                <button type = "button" class = "black" hx-confirm = "Are you sure?" hx-swap = "outerHTML" hx-delete = "{{url_for('delete_card', id = card.id)}}"> Delete </button>
             {% endif %}
             </span>
         </form>

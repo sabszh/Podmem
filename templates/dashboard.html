@@ -17,11 +17,14 @@
                 <div class = "item">
                     <span class = "header">{{item.video.title}} <br><span class = "subheader">{{item.video.channel}}</span></span>
                     <span class = "button-wrapper"><a href = "{{url_for('study_deck', id = item.id)}}"class = "button light-green">Study</a>
-                    {{ components.dropdown_href("Actions", ["Edit", "Delete"], ["/view_userdeck/"~item.id, "/delete_userdeck/"~item.id]) }} 
+                    <!-- {{ components.dropdown_href("Actions", ["Edit", "Delete"], ["/view_userdeck/"~item.id, "/delete_userdeck/"~item.id]) }} !-->
+                    {% call components.dropdown_custom("Actions") %}
+                        <a class = "item" href = "{{url_for('view_userdeck', id = item.id)}}"> Edit </a>
+                        <a class = "item" @click = "confirm('Are you sure you want to delete?') ? window.location.href = '{{url_for('delete_userdeck', id = item.id)}}' : false"> Delete </a>
+                    {% endcall %}
                     </span>
                 </div>
             {% endfor %} 
         </div>
-    </div> 
-    
+    </div>  
 {% endblock %}

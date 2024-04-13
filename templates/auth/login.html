@@ -8,9 +8,9 @@
         <form name = "login-form" hx-post = "{{ url_for('auth.login') }}" hx-target = ".red.alert" method="POST">
             <h1> Sign in</h1>
             <span> Username </span> <br>
-            <input type = "text" name = "username" placeholder = "Your username"> <br>
+            <input type = "text" name = "username" placeholder = "Your username" autocomplete="off"> <br>
             <span> Password </span> <br>
-            <input type = "password" name = "password" placeholder = "Your password"> <br>
+            <input type = "password" name = "password" placeholder = "Your password" autocomplete="off"> <br>
             <span class = "terms"> <input type = "checkbox" name = "remember"> Remember me </span>
             <button class = "light-green"> Sign in </button> <br>
             <a style = "display: none;" href = ""> Forgot your password? </a>

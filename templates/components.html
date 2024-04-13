@@ -1,3 +1,4 @@
+<!-- Define dropdown using a list of href endpoints -->
 {% macro dropdown_href(name,labels=[],hrefs=[],styleClass="") -%}
 <span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false">
     <a class = "button inverse {{styleClass}} notranslate" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{name}}<img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
@@ -5,6 +6,16 @@
         {%- for label in labels -%}
         <a class = "item" href = "{{ hrefs[loop.index-1] }}"> {{label}} </a>
         {% endfor %}
+    </div>
+</span>
+{%- endmacro %}
+
+<!-- Define dropdown using custom html -->
+{% macro dropdown_custom(name,styleClass="") -%}
+<span x-data="{showDropdown: false}" class = "dropdown-wrapper" @mouseleave = "showDropdown=false">
+    <a class = "button inverse {{styleClass}} notranslate" @touchstart.passive="showDropdown = !showDropdown" @mouseover = "showDropdown=true" x-ref="button">{{name}}<img src = "{{ url_for('static', filename='images/arrow_select.svg')}}" alt = "Down Arrow"> </a>
+    <div class = "dropdown" x-show="showDropdown" x-anchor.offset.-10="$refs.button" x-transition x-cloak>
+        {{ caller() }}
     </div>
 </span>
 {%- endmacro %}
@@ -20,6 +31,7 @@
     <div class = "full-wrapper wave"></div> 
 {%- endmacro %}
 
+<!-- Pop up in the middle of screen. Steals focus. -->
 {% macro popup_window(fit_content=False) -%}
     <div x-cloak class = "popup window {% if fit_content %} fit-content {% endif %}" x-data = "{open: false}" x-trap = "open" x-show = "open" x-transition.opacity.duration.100ms x-init="open=true">
         <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">
@@ -27,6 +39,7 @@
     </div>
 {%- endmacro %}
 
+<!-- Pop up at the right corner of screen. Doesn't steal focus. -->
 {% macro popup() -%}
     <div x-cloak class = "popup" x-data = "{open: false}" x-show = "open" x-transition.opacity.duration.500ms x-init="setTimeout(() => open = true, 5000)">
         <img @click = "open=false" class = "x clickable" src = "{{ url_for('static', filename='images/x.svg') }}" alt = "X icon">

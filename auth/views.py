@@ -71,10 +71,11 @@ def signup_post():
     else:
         #return "Invalid input."
         errors = [y[0] for x, y in form.errors.items()]
-        error_string = ""
-        for error in errors:
-            error_string = error_string + error + " "
-        return error_string
+        response = ""
+        for error in form.errors.items():
+            response = f"{response} <span id = {error[0]} class = 'red alert' hx-swap-oob='outerHTML'>{error[1][0]}</span>"
+            print(response)
+        return response
 
 @auth_bp.route('/verify/<token>')
 @login_required

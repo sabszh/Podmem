@@ -248,7 +248,6 @@ header .dropdown .item {
 }
 
 #login-wrapper .alert {
-    margin-top: 1.5rem;
     font-weight: 800;
 }
 
@@ -1200,6 +1199,10 @@ button img, .button img {
 
 .settings-dropdown select {
     color: white;
+}
+
+.settings-dropdown select option {
+    color: black;
 }
 
 [contenteditable]:focus {

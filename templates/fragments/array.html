@@ -1,0 +1,17 @@
+<!--
+Renders a hidden array that can be fetched for use with alpine.
+The array must consist of tuples where array[i][0] is the value name and array[i][1] is the value. 
+Useful for rendering htmx response that will be used different places in the page.
+-->
+
+<span
+    class = "array"
+    x-ref = "array"
+    x-data = "{
+       {% for item in array %}
+            {{item[0]}}: {{item[1]}},
+       {% endfor %}
+    }"
+    x-show = "false"
+>
+</span>
