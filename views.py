@@ -120,7 +120,7 @@ def save_deck(session_id):
             session.edited = edited
             if edited: session.export_json = json_data 
             models.db.session.commit()      
-            return redirect(url_for("dashboard"))
+            return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
         else:
             abort(400)
     else:
