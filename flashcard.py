@@ -52,7 +52,6 @@ def generate_flashcards(texts : list[str], count_per_chunk, difficulty = 2, temp
             temperature=temp,
             messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}]
         ).choices[0].message.content)
-        print("Generated cards.")
  
     #split into question/answer pairs
     qa_list = []
