@@ -45,6 +45,7 @@ def get_transcript(id):
     print(transcript)
     formatter = TextFormatter()
     txt_transcript = formatter.format_transcript(transcript)
+    print("Fetched transcript.")
     return txt_transcript
 
 if __name__ == "__main__":
