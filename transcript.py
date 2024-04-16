@@ -41,6 +41,7 @@ def get_video_info(id):
 
 def get_transcript(id):
     print(id)
+    transcript_obj = YouTubeTranscriptApi.find_transcript()
     transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
     print(transcript)
     formatter = TextFormatter()
@@ -49,7 +50,7 @@ def get_transcript(id):
 
 if __name__ == "__main__":
     try:
-        video_transcript = get_transcript("DrXvsfLVWeE")
+        video_transcript = get_transcript("WpM-QjkNufw")
         print(video_transcript)
     except Exception as error: 
         print("400 Error:", error)
