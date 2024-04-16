@@ -41,7 +41,6 @@ def get_video_info(id):
 
 def get_transcript(id):
     print(id)
-    transcript_obj = YouTubeTranscriptApi.find_transcript()
     transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
     print(transcript)
     formatter = TextFormatter()
