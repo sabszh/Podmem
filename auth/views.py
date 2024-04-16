@@ -49,6 +49,8 @@ def signup_post():
     if validation:
         username = form.username.data.lower()
         email = form.email.data
+        newsletter = form.newsletter.data
+
         if models.User.query.filter_by(email=email).first(): # if this returns a user, then the email already exists in database
             return 'Email address already exists'
 
@@ -64,10 +66,10 @@ def signup_post():
             return "Couldn't send email."
         
         # add the new user to the database
-        user = models.add_user(email=form.email.data, username=form.username.data, password=generate_password_hash(form.password.data, method='scrypt'))
+        user = models.add_user(email=form.email.data, username=form.username.data, password=generate_password_hash(form.password.data, method='scrypt'), newsletter = newsletter)
         login_user(user)
 
-        return f'<script>window.location.href = "{url_for("auth.inactive")}", true;</script>'
+        return f'<span id = "response" hx-swap-oob="outerHTML"> <script>window.location.href = "{url_for("auth.inactive")}", true;</script></span>'
     else:
         #return "Invalid input."
         errors = [y[0] for x, y in form.errors.items()]

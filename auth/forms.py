@@ -5,3 +5,4 @@ class SignupForm(Form):
     username = StringField('username', [validators.Length(min=2, max=25, message="Username must be between 2 and 25 characters")])
     password = PasswordField('password', [validators.Length(min=8, max=25, message="Password must be between 8 and 25 characters")])
     terms  = BooleanField('terms', [validators.DataRequired(message="Terms must be accepted")])
+    newsletter  = BooleanField('newsletter', [])

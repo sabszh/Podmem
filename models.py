@@ -12,16 +12,18 @@ class User(UserMixin, db.Model):
     is_verified = db.Column(db.Boolean, nullable=True, unique=False)
     creation_date = db.Column(db.DateTime, nullable=False, unique=False)
     verification_date = db.Column(db.DateTime, nullable=True, unique=False)
+    newsletter = db.Column(db.Boolean, nullable=True, unique=False)
 
 #add new user
-def add_user(username, password, email, is_verified = False, creation_date = datetime.now(), verification_date = None):
+def add_user(username, password, email, is_verified = False, creation_date = datetime.now(), verification_date = None, newsletter = False):
     user = User(
         username=username,
         password=password,
         email=email,
         is_verified = is_verified,
         creation_date = creation_date,
-        verification_date = verification_date
+        verification_date = verification_date,
+        newsletter = newsletter
     )
     db.session.add(user)
     db.session.commit()
