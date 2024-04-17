@@ -795,7 +795,6 @@ header .dropdown .item {
     grid-column: main;
     justify-content: center;
     margin-top: 2rem;
-    min-height: 12rem;
 }
 
 #nav-wrapper.study div {
@@ -1570,6 +1569,12 @@ select:hover {
         padding-right: 0;
     }
 
+    #video-titledata-wrapper button {
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
     .decoration {
         display: none;
     }
@@ -1627,11 +1632,6 @@ select:hover {
     #hero-wrapper .small {
         font-size: 1rem;
         line-height: 1.5rem;
-    }
-
-    #video-titledata-wrapper span button {
-        text-align: center;
-        margin-top: 2rem;
     }
 
     .popup {
@@ -1716,6 +1716,18 @@ select:hover {
 
     .wave_flipped {
         display: none;
+    }
+
+    #nav-wrapper div img {
+        width: 3rem;
+    }
+
+    #nav-wrapper div span {
+        font-size: 1.5rem; 
+    }
+
+    #nav-wrapper div img {
+        margin: 0 1rem;
     }
 
 }

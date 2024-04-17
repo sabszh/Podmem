@@ -116,11 +116,11 @@
         <span> <span  x-effect = "$store.carousel.curCard" x-text = "$store.carousel.curCard + 1 + '/' + $store.carousel.cards.length"></span> </span>
         <img x-data="{canClick: true}" @click=
         "if ($store.carousel.cards.length - 1 > 0){
-          if ($store.carousel.curCard + 1 > $store.carousel.cards.length - 1){ $store.carousel.curCard = $store.carousel.cards.length - 2;}
           $store.carousel.cards.splice($store.carousel.curCard, 1);
+          if ($store.carousel.curCard + 1 > $store.carousel.cards.length - 1){ $store.carousel.curCard = $store.carousel.cards.length - 2;}
         }
         if ($store.carousel.cards.length == 1){canClick=false}"
-        src = "{{ url_for('static', filename='images/trash.svg') }}" alt = "Trashcan Icon" :class = "canClick ? 'clickable' : 'nonclickable'" style = "margin-right: 0; margin-left: 1rem; width: 2.5rem;">
+        src = "{{ url_for('static', filename='images/trash.svg') }}" alt = "Trashcan Icon" id = "trash" :class = "canClick ? 'clickable' : 'nonclickable'" style = "margin-right: 0; margin-left: 1rem; width: 2.5rem;">
         <img class = "clickable right" src = "{{ url_for('static', filename='images/arrow_nav.svg') }}" alt = "Right Arrow Icon" @click=
         "if ($store.carousel.curCard + 1 < $store.carousel.cards.length){$store.carousel.curCard++;} else {$store.carousel.curCard = 0;}">
       </div>
