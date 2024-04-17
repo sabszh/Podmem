@@ -32,11 +32,11 @@
             this.error_message = "Field is empty"
             console.log(this.validate)
           }
-          else if (!input.includes("youtube.com/watch?v=")) {
+          else if (!input.includes("youtube.com/watch?v=") && !input.includes("youtu.be/")) {
             this.validate = false;
-            this.error_message = "Invalid URL"
-            console.log(this.validate)
-          }
+            this.error_message = "Invalid URL";
+            console.log(this.validate);
+        }
           else {
             this.validate = true;
             this.display_error = false;
