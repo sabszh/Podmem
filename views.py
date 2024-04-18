@@ -285,6 +285,14 @@ def get_notification(type):
     if type == "message":
         return f"{n} cards pending for practice"
 
+@app.route("/sitemap.xml")
+def sitemap():
+    return render_template('sitemap.xml')
+
+@app.route("/robots.txt")
+def sitemap():
+    return render_template('robots.txt')
+
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('errors/error.html', error_code = "500", error_title = "server error", error_message = "Sorry, something went wrong."), 500
