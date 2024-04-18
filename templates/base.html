@@ -59,15 +59,20 @@
 
         <style> .wave_flipped {background-image: url("{{ url_for('static', filename= 'images/wave_flipped.svg')}}"); height: 8rem; background-position: bottom;} </style>
         <div class = "full-wrapper wave wave_flipped"></div> 
-        <footer class = "full-wrapper">
+        <footer class="full-wrapper">
             <div>
-                <a href = "{{url_for('index')}}" class = "logo" ><img src = "{{ url_for('static', filename='images/logo_inverted.svg') }}" alt = "Podmem Logo Inverted"></a>
-                <div> <span><a href = "{{url_for('index')}}">Home</a></span> <span><a href = "https://forms.gle/tyN8fwhQ9o4SjhMh6" hx-target="body" hx-swap="beforeend">Survey</a></span> <span><a href = "" hx-get="{{url_for('auth.terms')}}" hx-target="body" hx-swap="beforeend">Terms of Use</a></span> <span><a href = "" hx-get="{{url_for('auth.privacy_policy')}}" hx-target="body" hx-swap="beforeend">Privacy Policy</a></span> </div>
+                <a href="{{url_for('index')}}" class="logo"><img src="{{ url_for('static', filename='images/logo_inverted.svg') }}" alt="Podmem Logo Inverted"></a>
+                <div>
+                    <span><a href="{{url_for('index')}}">Home</a></span>
+                    <span><a href="https://forms.gle/tyN8fwhQ9o4SjhMh6" hx-target="_blank" rel="noopener noreferrer">Survey</a></span>
+                    <span><a href="" hx-get="{{url_for('auth.terms')}}" hx-target="body" hx-swap="beforeend">Terms of Use</a></span>
+                    <span><a href="" hx-get="{{url_for('auth.privacy_policy')}}" hx-target="body" hx-swap="beforeend">Privacy Policy</a></span>
+                </div>
                 <span>
                     <b>©  2024 Podmem </b> – All Rights Reserved
                 </span>
             </div>
-        </footer>  
+        </footer>        
         <!-- 100% privacy-first analytics -->
         <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
         <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>

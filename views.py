@@ -6,6 +6,7 @@ import transcript
 import utility
 import models
 import datetime
+import re
 from flask_login import current_user, login_required
 from supermemo2 import SMTwo
 from auth.decorators import is_verified
@@ -28,13 +29,20 @@ def flashcards():
         #honeypot spam protection
         honey_check = request.form.get("terms")
         honey_input = request.form.get("surname")
-        if honey_check or honey_input != "": return render_template("base.html")
+        if honey_check or honey_input != "":
+            return render_template("base.html")
 
         if video_url != None:
-            #split the URL based on "v=" paramater
-            video_id = video_url.split("v=", 1)[1]
-            # Check if there are additional paramters after video ID and remove them
-            video_id = video_id.split("&", 1)[0]
+            # Check if the URL is a mobile link
+            if "youtu.be" in video_url:
+                # Extract video ID from mobile link
+                video_id = video_url.split("/")[-1].split("?")[0]
+            else:
+                # Extract video ID from standard YouTube URL
+                video_id = video_url.split("v=", 1)[1]
+                # Check if there are additional parameters after video ID and remove them
+                video_id = video_id.split("&", 1)[0]
+
             #look in db to see if video already has been prompted
             session = models.Sessions.query.filter(models.Sessions.video_id==video_id, models.Sessions.difficulty == diff, models.Sessions.amount == amount, models.Sessions.json_data != "").first() 
             video_match = models.Video.query.filter_by(video_id=video_id).first()
