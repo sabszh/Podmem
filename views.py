@@ -290,7 +290,7 @@ def sitemap():
     return render_template('sitemap.xml')
 
 @app.route("/robots.txt")
-def sitemap():
+def robots():
     return render_template('robots.txt')
 
 @app.errorhandler(500)
