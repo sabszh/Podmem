@@ -124,6 +124,10 @@ def privacy_policy():
 def terms():
     return render_template("fragments/terms.html")
 
+@auth_bp.route("/faq")
+def faq_page():
+    return render_template("fragments/faq_page.html")
+
 @auth_bp.route('/logout')
 @login_required
 def logout():
