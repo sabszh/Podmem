@@ -40,7 +40,13 @@ def get_video_info(id):
         raise Exception("Video doesn't exist.")
 
 def get_transcript(id):
-    transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
+    try:
+        transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
+    except:
+        transcript_list = YouTubeTranscriptApi.list_transcripts(id)
+        languages = [lang['language_code'] for lang in transcript_list._translation_languages]
+        transcript = transcript_list.find_transcript(languages).fetch()
+
     formatter = TextFormatter()
     txt_transcript = formatter.format_transcript(transcript)
     return txt_transcript
