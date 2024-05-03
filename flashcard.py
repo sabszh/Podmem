@@ -2,6 +2,7 @@ import config
 import transcript
 from openai import OpenAI
 import tiktoken
+from math import log2
 
 SYSTEM_PROMPT = "You are a flashcard generator. You generate questions and answers that are key to understanding the transcripts given to you."
 TEMPERATURE = 0
@@ -41,11 +42,11 @@ def generate_flashcards(texts : list[str], count_per_chunk, difficulty = 2, temp
     outputs = []
     difficulty_options = ["Very easy", "Average", "Expert"]
     #generate questions/answers
-    for text in texts:
+    for index, text in enumerate(texts):
         if len(outputs) == 0:
-            prompt = f"Generate {count_per_chunk} concise flashcard questions and answers to aid in retaining the key insights from the video transcript provided below. The questions should pertain solely to the primary subject matter of the video and should be designed to enhance learning. Avoid questions regarding the speaker, channel, sponsors, or ancillary information. The difficulty of the questions should be set to:  {difficulty_options[difficulty-1]}. Generate the flashcards in the language of the transcript. \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
+            prompt = f"Generate {round(count_per_chunk + 1.3**-index * 2)} concise flashcard questions and answers to aid in retaining the key insights from the video transcript provided below. The questions should pertain solely to the primary subject matter of the video and should be designed to enhance learning. Avoid questions regarding the speaker, channel, sponsors, or ancillary information. The difficulty of the questions should be set to:  {difficulty_options[difficulty-1]}. \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
         else:
-            prompt = f"Generate {count_per_chunk} concise flashcard questions and answers to aid in retaining the key insights from the video transcript provided below. The questions should pertain solely to the primary subject matter of the video and should be designed to enhance learning. Avoid questions regarding the speaker, channel, sponsors, or ancillary information. Only generate questions and answers that haven't already been generated. The difficulty of the questions should be set to: {difficulty_options[difficulty-1]}. Generate the flashcards in the language of the transcript. \n Already Generated: {outputs[:-1]}  \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
+            prompt = f"Generate {round(count_per_chunk + 1.3**-index * 2)} concise flashcard questions and answers to aid in retaining the key insights from the video transcript provided below. The questions should pertain solely to the primary subject matter of the video and should be designed to enhance learning. Avoid questions regarding the speaker, channel, sponsors, or ancillary information. Only generate questions and answers that haven't already been generated. The difficulty of the questions should be set to: {difficulty_options[difficulty-1]}. \n Already Generated: {outputs[:-1]}  \n Desired format: \n Q: <question>, A: <answer> \n Transcript: ### {text} ###"
         
         outputs.append(client.chat.completions.create(
             model=model,
