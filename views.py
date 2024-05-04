@@ -47,23 +47,23 @@ def flashcards():
             session = models.Sessions.query.filter(models.Sessions.video_id==video_id, models.Sessions.difficulty == diff, models.Sessions.amount == amount, models.Sessions.json_data != "").first() 
             video_match = models.Video.query.filter_by(video_id=video_id).first()
             
+            if not video_match:
+                #get video info from data api
+                try:
+                    video_info = transcript.get_video_info(video_id)
+                except Exception as error:
+                    raise FlashcardError(error) 
+
             #transcribe video
             try:
                 video_transcript = transcript.get_transcript(video_id)
             except Exception as error: 
-                print("400 Error:", error)
-                abort(400)
+                raise FlashcardError(error)
 
             if session:
                 id = models.add_session(video_id, "", session.amount, session.difficulty)
                 return render_template('flashcards.html', flashcards_dumps = session.json_data, url = video_url, title = video_match.title, channel = video_match.channel, session_id = id, transcript = video_transcript)
             else: #only generate new entry if exact prompt doesnt already exist in db
-                #get video info from data api
-                try:
-                    video_info = transcript.get_video_info(video_id)
-                except Exception as error: 
-                    print("400 Error:", error)
-                    abort(400)
                 flashcards = flashcard.generate_flashcards(flashcard.split_text(video_transcript, TOKENS_PER_CHUNK), CARDS_PER_CHUNK * amount, difficulty=diff)
                 #create dictionary with all flash cards and convert to json
                 dict_list = [flashcard.return_dict() for flashcard in flashcards]
@@ -294,6 +294,19 @@ def sitemap():
 @app.route("/robots.txt")
 def robots():
     return render_template('robots.txt')
+
+class CustomError(Exception):
+    pass
+
+class FlashcardError(CustomError):
+    code = "403"
+    description = "Flashcard Generation Error"
+
+
+@app.errorhandler(CustomError)
+def handle_exception(e):
+    print("Custom error:", e.args[0])
+    return render_template('errors/error.html', error_code = e.code, error_title = e.description, error_message = e.args[0]), e.code
 
 @app.errorhandler(500)
 def internal_server_error(e):

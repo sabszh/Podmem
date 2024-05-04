@@ -20,32 +20,42 @@ def get_video_info(id):
     }
 
     validate_video_id(id)
+
     r = requests.get(
         VIDEOS_API_URL,
         params=videos_params,
-    ).json()
+    )
 
-    if r:
+    if r.ok:
         video_info = {
             "title": "",
             "channel_title": ""
         }
 
-        for video in r["items"]:
+        r_json = r.json()
+
+        if r_json["items"] == []:
+            raise Exception("No video found with the given ID.")
+
+        for video in r_json["items"]:
             video_info.update({"title": video["snippet"]["title"]})
             video_info.update({"channel_title": video["snippet"]["channelTitle"]})
 
         return video_info
     else:
-        raise Exception("Video doesn't exist.")
+        raise Exception("Error with fetching video data.")
+
 
 def get_transcript(id):
     try:
         transcript = YouTubeTranscriptApi.get_transcript(id, languages=["en"])
     except:
-        transcript_list = YouTubeTranscriptApi.list_transcripts(id)
-        languages = [lang['language_code'] for lang in transcript_list._translation_languages]
-        transcript = transcript_list.find_transcript(languages).fetch()
+        try:
+            transcript_list = YouTubeTranscriptApi.list_transcripts(id)
+            languages = [lang['language_code'] for lang in transcript_list._translation_languages]
+            transcript = transcript_list.find_transcript(languages).fetch()
+        except:
+            raise Exception("Error with generating transcript for the given video. Check if transcripts are enabled or if it is age restricted.")
 
     formatter = TextFormatter()
     txt_transcript = formatter.format_transcript(transcript)

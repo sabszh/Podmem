@@ -137,7 +137,7 @@
         alert('Copied to clipboard.');"
         class = "button light-green"> Copy </a>
       </div>
-      <textarea id = "transcript-text" x-show="show_transcript"> {{transcript}} </textarea>
+      <textarea x-cloak id = "transcript-text" x-show="show_transcript"> {{transcript}} </textarea>
     </div>
 
     {{components.survey_popup()}}
