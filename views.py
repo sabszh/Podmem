@@ -17,7 +17,7 @@ CARDS_PER_CHUNK = 4
 @app.route('/')
 @app.route("/index")
 def index():
-    return render_template('index.html', header_color = "purple")
+    return render_template('index.html')
 
 @app.route("/flashcards", methods =["GET", "POST"])
 def flashcards():
@@ -46,16 +46,18 @@ def flashcards():
             #look in db to see if video already has been prompted
             session = models.Sessions.query.filter(models.Sessions.video_id==video_id, models.Sessions.difficulty == diff, models.Sessions.amount == amount, models.Sessions.json_data != "").first() 
             video_match = models.Video.query.filter_by(video_id=video_id).first()
+            
+            #transcribe video
+            try:
+                video_transcript = transcript.get_transcript(video_id)
+            except Exception as error: 
+                print("400 Error:", error)
+                abort(400)
+
             if session:
                 id = models.add_session(video_id, "", session.amount, session.difficulty)
-                return render_template('flashcards.html', body_tag = "show_flashcards", flashcards_dumps = session.json_data, url = video_url, title = video_match.title, channel = video_match.channel, session_id = id, header_color = "purple")
+                return render_template('flashcards.html', flashcards_dumps = session.json_data, url = video_url, title = video_match.title, channel = video_match.channel, session_id = id, transcript = video_transcript)
             else: #only generate new entry if exact prompt doesnt already exist in db
-                #transcribe video
-                try:
-                    video_transcript = transcript.get_transcript(video_id)
-                except Exception as error: 
-                    print("400 Error:", error)
-                    abort(400)
                 #get video info from data api
                 try:
                     video_info = transcript.get_video_info(video_id)
@@ -70,9 +72,10 @@ def flashcards():
                 if not video_match: #only add new video if it doesn't already exist
                     models.add_video(video_id, video_info["title"], video_info["channel_title"])
                 id = models.add_session(video_id, dict_list_json, amount, diff)
-                return render_template('flashcards.html', body_tag = "show_flashcards", flashcards_dumps = dict_list_json, url = video_url, title = video_info["title"], channel = video_info["channel_title"], video_id = video_id, session_id=id, header_color = "purple")
-        
-    return render_template('flashcards.html', body_tag = "show_flashcards")
+                return render_template('flashcards.html', flashcards_dumps = dict_list_json, url = video_url, title = video_info["title"], channel = video_info["channel_title"], video_id = video_id, session_id=id, transcript = video_transcript)
+            
+    #if there is no post request, redirect to index    
+    return redirect('index')
 
 @app.route("/dashboard")
 @login_required
@@ -81,10 +84,10 @@ def dashboard():
     # check for decks corresponding to user id 
     decks = models.UserDeck.query.filter_by(user_id=current_user.id).all()
     if decks:
-        return render_template("dashboard.html", decks = decks, header_color = "purple")
+        return render_template("dashboard.html", decks = decks)
     else:
         flash("No cards saved.")
-        return render_template("dashboard.html", header_color = "purple")
+        return render_template("dashboard.html")
 
 @app.route("/save_deck/<session_id>", methods=['GET', 'POST'])
 @login_required
@@ -145,7 +148,6 @@ def view_userdeck(id):
                 cards = userdeck.cards,
                 title = userdeck.video.title,
                 channel = userdeck.video.channel,
-                header_color = "purple"
             )
         else: 
             flash("You do not have access to this page.")
@@ -169,7 +171,7 @@ def delete_userdeck(id):
 @app.route("/study/<id>", methods=['GET'])
 @login_required
 def study_deck(id):
-    return render_template("study.html", deck_id = id, header_color = "purple")
+    return render_template("study.html", deck_id = id,)
 
 @app.route("/study")
 @is_verified
@@ -177,9 +179,9 @@ def study_deck(id):
 def study_all():
     starting_card = models.UserCard.query.join(models.UserCard.deck).filter(models.UserDeck.user_id == current_user.id, models.UserCard.due_date <= datetime.datetime.now()).first()
     if starting_card:
-        return render_template("study.html", starting_card_id=starting_card.id, header_color = "purple")
+        return render_template("study.html", starting_card_id=starting_card.id)
     else:
-        return render_template("study.html", starting_card_id=-1, header_color = "purple")
+        return render_template("study.html", starting_card_id=-1)
 
 @app.route("/review/<rating>/<card_id>")
 @login_required

@@ -35,7 +35,7 @@
       });
     </script>
     {% endblock %}    
-    <div class = "full-wrapper {{header_color}} padding-bot">
+    <div class = "full-wrapper purple padding-bot">
       <div id = "video-titledata-wrapper" x-data="export_">
         <h1 class = "big">{{title}}</h1>
         <div x-data = "{showTooltip: false}">
@@ -124,6 +124,20 @@
         <img class = "clickable right" src = "{{ url_for('static', filename='images/arrow_nav.svg') }}" alt = "Right Arrow Icon" @click=
         "if ($store.carousel.curCard + 1 < $store.carousel.cards.length){$store.carousel.curCard++;} else {$store.carousel.curCard = 0;}">
       </div>
+    </div>
+
+    <div id = "transcript-wrapper" x-data="{show_transcript: false, copyText: document.getElementById('transcript-text')}">
+      <h2> Transcript </h2>
+      <div>
+        <a class = "button inverse" @click="show_transcript = !show_transcript; console.log(show_transcript)" x-text="show_transcript ? 'Hide' : 'Show'"> View  </a>
+        <a @click = 
+        "copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(copyText.value);
+        alert('Copied to clipboard.');"
+        class = "button light-green"> Copy </a>
+      </div>
+      <textarea id = "transcript-text" x-show="show_transcript"> {{transcript}} </textarea>
     </div>
 
     {{components.survey_popup()}}

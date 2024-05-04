@@ -598,6 +598,37 @@ header .dropdown .item {
     margin-right: 1.5rem;
 }
 
+#transcript-wrapper {
+    display: inherit;
+    grid-column: main;
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+    justify-items: center;
+}
+
+#transcript-wrapper h2 {
+    font-size: 2.5rem;
+}
+
+#transcript-wrapper >div {
+    display: flex;
+    gap: 2rem;
+}
+
+#transcript-wrapper textarea {
+    margin-top: 4rem;
+    height: 25rem;
+    border-radius: 1rem;
+    padding: 2rem 5rem;
+    resize: none;
+    border: 3px solid black;
+    font-size: 1.2rem;
+    text-align: center;
+    width: min-content;
+    box-shadow: 3px 2px 0px 0px black;
+}
+
+
 #flashcard-wrapper {
     display: inherit;
     grid-column: main;
@@ -1221,6 +1252,28 @@ textarea {
 
 textarea::placeholder {
     color:black;
+}
+
+textarea::-webkit-scrollbar {
+    width: 0.6rem;
+}
+
+/* Track */
+textarea::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px grey; 
+    border-radius: 10px;
+}
+
+/* Handle */
+textarea::-webkit-scrollbar-thumb {
+    background: rgb(7, 7, 7); 
+    border-radius: 10px;
+    height: 2rem;
+}
+
+/* Handle on hover */
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #009eb3; 
 }
 
 input[type=text], input[type=password], input[type=email] {
