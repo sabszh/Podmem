@@ -47,12 +47,11 @@ def flashcards():
             session = models.Sessions.query.filter(models.Sessions.video_id==video_id, models.Sessions.difficulty == diff, models.Sessions.amount == amount, models.Sessions.json_data != "").first() 
             video_match = models.Video.query.filter_by(video_id=video_id).first()
             
-            if not video_match:
-                #get video info from data api
-                try:
-                    video_info = transcript.get_video_info(video_id)
-                except Exception as error:
-                    raise FlashcardError(error) 
+            #get video info from data api
+            try:
+                video_info = transcript.get_video_info(video_id)
+            except Exception as error:
+                raise FlashcardError(error) 
 
             #transcribe video
             try:
