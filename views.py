@@ -8,7 +8,7 @@ import models
 import datetime
 import re
 from flask_login import current_user, login_required
-from supermemo2 import sm_two as SMTwo
+from supermemo2 import SMTwo
 from auth.decorators import is_verified
 
 TOKENS_PER_CHUNK = 3900
