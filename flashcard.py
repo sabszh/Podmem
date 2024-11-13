@@ -73,5 +73,5 @@ def generate_flashcards(texts : list[str], count_per_chunk, difficulty = 2, temp
 
 if __name__ == "__main__":
     video_transcript = transcript.get_transcript("bjL-Z7fW2FM")
-    #(generate_flashcards(split_text(video_transcript, 3900), 2))
+    print(generate_flashcards(split_text(video_transcript, 3900), 2))
 
