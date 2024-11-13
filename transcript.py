@@ -43,7 +43,7 @@ def get_video_info(id):
 
         return video_info
     else:
-        raise Exception(f"Error with fetching video data. {r_json}")
+        raise Exception(f"Error with fetching video data. {r}")
 
 def get_transcript(id):
     try:
