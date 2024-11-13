@@ -43,8 +43,7 @@ def get_video_info(id):
 
         return video_info
     else:
-        raise Exception("Error with fetching video data.")
-
+        raise Exception(f"Error with fetching video data. {r_json}")
 
 def get_transcript(id):
     try:
@@ -54,8 +53,8 @@ def get_transcript(id):
             transcript_list = YouTubeTranscriptApi.list_transcripts(id)
             languages = [lang['language_code'] for lang in transcript_list._translation_languages]
             transcript = transcript_list.find_transcript(languages).fetch()
-        except:
-            raise Exception("Error with generating transcript for the given video. Check if transcripts are enabled or if it is age restricted.")
+        except Exception as e:
+            raise Exception(f"Error with generating transcript for the given video. Check if transcripts are enabled or if it is age restricted. {e}")
 
     formatter = TextFormatter()
     txt_transcript = formatter.format_transcript(transcript)
